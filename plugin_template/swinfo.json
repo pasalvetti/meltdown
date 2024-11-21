@@ -1,0 +1,30 @@
+{
+  "spec": "2.0",
+  "mod_id": "Meltdown",
+  "author": "Polo",
+  "name": "Meltdown",
+  "description": "",
+  "source": "https://github.com/pasalvetti/meltdown",
+  "version": "0.1.0",
+  "version_check": "https://raw.githubusercontent.com/pasalvetti/meltdown/refs/heads/main/swinfo.json",
+  "ksp2_version": {
+    "min": "0.2.2",
+    "max": "*"
+  },
+  "dependencies": [
+    {
+      "id": "com.github.x606.spacewarp",
+      "version": {
+        "min": "1.9.5",
+        "max": "*"
+      }
+    },
+    {
+      "id": "PatchManager",
+      "version": {
+        "min": "0.11.1",
+        "max": "*"
+      }
+    }
+  ]
+}

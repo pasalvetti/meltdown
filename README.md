@@ -1,2 +1,2 @@
-# meltdown
-A KSP2 mod for heat management.
+# Meltdown
+ A KSP2 mod adding heat management.
