@@ -21,7 +21,7 @@ namespace Meltdown.Modules
         private void UpdatePAMVisibility()
         {
             if (this == null || this._dataThermal == null) return;
-            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.TemperatureTxt, true);
+            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.TemperatureTxt, this.PartBackingMode == PartBehaviourModule.PartBackingModes.Flight);
         }
     }
 }
