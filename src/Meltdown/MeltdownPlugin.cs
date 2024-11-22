@@ -9,13 +9,6 @@ namespace Meltdown
 {
     internal class MeltdownPlugin
     {
-        static double temperatureMod = -1;
-        //static double otherFluxMod = 0;
-
-        [LocalizedField("PartModules/ResourceConverter/OutputMod")]
-        [PAMDisplayControl(SortIndex = 8)]
-        [HideInInspector]
-        static ModuleProperty<string> OutputTxtMod = new ModuleProperty<string>("lalaland", true, new ToStringDelegate(Data_ResourceConverter.GetConversionOutputString));
 
         /** Module_Generator **/
 
@@ -25,7 +18,7 @@ namespace Meltdown
         {
             //System.Diagnostics.Debug.Write("Meltdown: OnInitializePostFix");
             __instance.dataGenerator.AutoShutdown = true; // utile ?
-            __instance.dataGenerator.FluxGenerated = 10000; // la valeur qui permet d'activer l'augmentation de la température (100 000 = explose en 1 s)
+            __instance.dataGenerator.FluxGenerated = 30000; // la valeur qui permet d'activer l'augmentation de la température (100 000 = explose en 1 s)
             //System.Diagnostics.Debug.Write("--FluxGenerated=" + __instance.dataGenerator.FluxGenerated); // ok
         }
 
@@ -36,7 +29,7 @@ namespace Meltdown
         static public void OnInitializePostFix(Module_ResourceConverter __instance) // tourne
         {
             //System.Diagnostics.Debug.Write("Meltdown: Module_ResourceConverter.OnInitializePostFix");
-            __instance._dataResourceConverter.FluxGenerated = 10000; // la valeur qui permet d'activer l'augmentation de la température (100 000 = explose en 1 s)
+            __instance._dataResourceConverter.FluxGenerated = 30000; // la valeur qui permet d'activer l'augmentation de la température (100 000 = explose en 1 s)
             //System.Diagnostics.Debug.Write("--FluxGenerated=" + __instance._dataResourceConverter.FluxGenerated); // ok
         }
 
@@ -48,29 +41,6 @@ namespace Meltdown
             __instance._dataResourceConverter.ConverterIsActive = !__instance._dataResourceConverter.ConverterIsActive; // nécessaire pour faire augmenter la température quand on active le générateur
             System.Diagnostics.Debug.Write("--ConverterIsActive=" + __instance._dataResourceConverter.ConverterIsActive);
             // InitializeTemperature(__instance);
-        }
-
-        [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.UpdatePAMVisibility))]
-        [HarmonyPrefix]
-        public static void UpdatePAMVisibilityPostfix(bool state, Module_ResourceConverter __instance)
-        {
-            System.Diagnostics.Debug.Write("Meltdown: Module_ResourceConverter.UpdatePAMVisibility");
-            __instance._dataResourceConverter.SetVisible((IModuleDataContext)OutputTxtMod, true); // [Error  :UnityExplorer] [Unity] [Debug] Cannot change visibility on a NULL PropertyContextKey
-            //System.Diagnostics.Debug.Write("--Temperature=" + __instance.part.Model.ThermalData.Temperature);
-        }
-
-        [HarmonyPatch(typeof(PartComponentModule_ResourceConverter), nameof(PartComponentModule_ResourceConverter.OnUpdate))]
-        [HarmonyPostfix]
-        public static void OnUpdatePostfix(double universalTime, double deltaUniversalTime, PartComponentModule_ResourceConverter __instance)
-        {
-            //System.Diagnostics.Debug.Write("Meltdown: PartComponentModule_ResourceConverter.OnUpdate");
-            if (__instance._dataResourceConverter != null && __instance._dataResourceConverter.OutputTxt != null)
-            {
-                //__instance._dataResourceConverter.OutputTxt.SetValue("polo");
-                __instance._dataResourceConverter.OutputTxt.SetValue(Convert.ToInt32(__instance.Part.Temperature).ToString());
-                OutputTxtMod.SetValue(__instance.Part.Temperature.ToString());
-                //System.Diagnostics.Debug.Write("--OutputTxt=" + __instance._dataResourceConverter.OutputTxt.GetValue());
-            }
         }
 
         /** Heatshield **/
