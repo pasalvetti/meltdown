@@ -24,7 +24,7 @@ namespace Meltdown.Modules
 
         public override void OnUpdate(double universalTime, double deltaUniversalTime)
         {
-            this._dataThermal.TemperatureTxt.SetValue(this.Part.Temperature.ToString());
+            this._dataThermal.TemperatureTxt.SetValue(Convert.ToInt32(this.Part.Temperature).ToString() + " K");
         }
     }
 }
