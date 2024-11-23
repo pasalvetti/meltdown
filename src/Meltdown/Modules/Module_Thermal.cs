@@ -6,7 +6,7 @@ namespace Meltdown.Modules
 {
     public class Module_Thermal : PartBehaviourModule
     {
-        [FormerlySerializedAs("DataThermal")]
+        //[FormerlySerializedAs("DataThermal")]
         [SerializeField]
         protected Data_Thermal _dataThermal;
 
@@ -15,13 +15,14 @@ namespace Meltdown.Modules
         public override void OnInitialize()
         {
             base.OnInitialize();
-            this.UpdatePAMVisibility();
+            UpdatePAMVisibility();
         }
 
         private void UpdatePAMVisibility()
         {
             if (this == null || this._dataThermal == null) return;
-            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.TemperatureTxt, this.PartBackingMode == PartBehaviourModule.PartBackingModes.Flight);
+            System.Diagnostics.Debug.Write("Meltdown: PartBackingMode="+ PartBackingMode);
+            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.TemperatureTxt, PartBackingMode == PartBackingModes.Flight); // field is still showing in the OAB
         }
     }
 }
