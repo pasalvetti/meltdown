@@ -13,6 +13,7 @@ using Unity.Mathematics;
 using System.Linq;
 using UniLinq;
 using KSP.Iteration.UI.Binding;
+using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
 
 namespace Meltdown
 {
@@ -161,7 +162,16 @@ namespace Meltdown
                 }
 
             }
+        }
 
+        /**
+         * Return true if the part is generating heat.
+         **/
+        private static bool isGeneretingHeat(PartComponent part)
+        {
+            PartComponentModule_ResourceConverter module;
+            bool flagResourceConverter = part.TryGetModule<PartComponentModule_ResourceConverter>(out module) && module._dataResourceConverter.ConverterIsActive && module._dataResourceConverter.conversionRate.GetValue() != 0;
+            return flagResourceConverter;
         }
 
         /**
@@ -186,17 +196,19 @@ namespace Meltdown
                  * Removes from each part of the ship the energy diffused by each radiator.
                  * x100 to counteract PartComponentModule_Cooler.EnergyApplied that cannot be patched.
                  **/
-                //if (part.ThermalData.EnvironmentFlux == 0) break; // if the part's temperature is equal to that of the environnement, there's no heat to radiate. // not working
+                if (!isGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
                 int count = __instance._coolingModules.Count;
                 while (count-- > 0)
                 {
-                    if (!__instance._coolingModules[count].CoolerOperational) break;
+                    if (!__instance._coolingModules[count].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
                     part.ThermalData.OtherFlux -= __instance._coolingModules[count].EnergyApplied * 100;
                     //System.Diagnostics.Debug.Write("ThermalComponent.OnUpdatePreFix: Removing " + (__instance._coolingModules[count].EnergyApplied * 100) + " kW from " + part.PartName + ".OtherFlux");
                 }
             }
 
         }
+
+
 
         [HarmonyPatch(typeof(IterationJob), nameof(IterationJob.Execute))]
         [HarmonyPostfix]
