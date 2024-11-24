@@ -187,12 +187,6 @@ namespace Meltdown
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
                 /**
-                 * Increase the energy removed by the coolers x100x1000
-                 * - x100 to counteract PartComponentModule_Cooler.EnergyApplied that cannot be patched.
-                 * - x1000 to counteract ThermalComponentJob.FinalizeJob.Execute that cannot be patched.
-                 **/
-                part.ThermalData.CoolingEnergyToApply *= 100000; // still useful?
-                /**
                  * Removes from each part of the ship the energy diffused by each radiator.
                  * x100 to counteract PartComponentModule_Cooler.EnergyApplied that cannot be patched.
                  **/

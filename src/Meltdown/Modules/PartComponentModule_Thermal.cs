@@ -35,7 +35,7 @@ namespace Meltdown.Modules
             this._dataThermal.ExhaustFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.ExhaustFlux * 1000.0, "W", 3));
             this._dataThermal.otherFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.OtherFlux * 1000.0, "W", 3));
             
-            this._dataThermal.CoolingEnergyToApplyTxt.SetValue(Units.PrintSI(this.Part.ThermalData.CoolingEnergyToApply * -1000, "W", 3)); // radiators
+            this._dataThermal.CoolingEnergyToApplyTxt.SetValue(Units.PrintSI(this.Part.ThermalData.CoolingEnergyToApply * -100000, "W", 3)); // radiators, x100 to counteract PartComponentModule_Cooler.EnergyApplied that cannot be patched.
         }
     }
 }
