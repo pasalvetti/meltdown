@@ -194,10 +194,11 @@ namespace Meltdown
         [HarmonyPrefix]
         public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance)
         {
+            int count = __instance._coolingModules.Count;
+            if (count == 0) return;
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
                 if (!isGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
-                int count = __instance._coolingModules.Count;
                 while (count-- > 0)
                 {
                     if (!__instance._coolingModules[count].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
