@@ -1,10 +1,18 @@
 ﻿using HarmonyLib;
+using I2.Loc;
 using KSP;
 using KSP.Api;
 using KSP.Modules;
 using KSP.Sim.Definitions;
 using KSP.Sim.impl;
+using KSP.Sim.Util;
+using Meltdown.Modules;
 using UnityEngine;
+using static KSP.Sim.Util.ThermalComponentJob;
+using Unity.Mathematics;
+using System.Linq;
+using UniLinq;
+using KSP.Iteration.UI.Binding;
 
 namespace Meltdown
 {
@@ -27,7 +35,7 @@ namespace Meltdown
         [HarmonyPostfix]
         static public void OnInitializePostFix(Module_ResourceConverter __instance) // tourne
         {
-            __instance._dataResourceConverter.FluxGenerated = 30000; // la valeur qui permet d'activer l'augmentation de la température (100 000 = explose en 1 s)
+            __instance._dataResourceConverter.FluxGenerated = 300; // la valeur qui permet d'activer l'augmentation de la température
         }
 
         [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.OnToggleChangedValue))]
@@ -35,72 +43,96 @@ namespace Meltdown
         public static void OnToggleChangedValuePostFix(Module_ResourceConverter __instance) // fonctionne
         {
             __instance._dataResourceConverter.ConverterIsActive = !__instance._dataResourceConverter.ConverterIsActive; // nécessaire pour faire augmenter la température quand on active le générateur
+            //System.Diagnostics.Debug.Write("Module_ResourceConverter.OnToggleChangedValue: Change value of ConverterIsActive");
         }
 
         /**
-         * Fixes the generated flux not depending on the conversion rate.
-         * **/
+         * Fixes :
+         * - the flux should be multiplied by the conversion rate
+         * - the flux should not be multiplied by the time
+         **/
         [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.ThermalUpdate))]
         [HarmonyPostfix]
         public static void ThermalUpdatePostFix(double deltaTime, Module_ResourceConverter __instance)
-        {
-            //ThermalData thermalData = __instance.part.Model.ThermalData;
+        {           
             if (__instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.FluxGenerated > 0.0)
             {
-                __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * deltaTime * (double)__instance._dataResourceConverter.conversionRate.GetValue();
+                __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
-            //__instance.part.Model.ThermalData = thermalData;
+            
+        }
+
+        /**
+         * Stores the value of ConverterIsActive in __state for use in OnUpdatePostFix.
+         **/
+        [HarmonyPatch(typeof(PartComponentModule_ResourceConverter), nameof(PartComponentModule_ResourceConverter.OnUpdate))]
+        [HarmonyPrefix]
+        public static void OnUpdatePreFix(PartComponentModule_ResourceConverter __instance, ref bool __state)
+        {
+            //System.Diagnostics.Debug.Write("PartComponentModule_ResourceConverter.OnUpdatePreFix: ConverterIsActive=" + __instance._dataResourceConverter.ConverterIsActive);
+            __state = __instance._dataResourceConverter.ConverterIsActive;
+        }
+
+        /**
+         * OnUpdate seems to randomly change the value of ConverterIsActive from one frame to another, which is messing with heat generation in Module_ResourceConverter.ThermalUpdate().
+         * This assigns the value it had in Prefix.
+         **/
+        [HarmonyPatch(typeof(PartComponentModule_ResourceConverter), nameof(PartComponentModule_ResourceConverter.OnUpdate))]
+        [HarmonyPostfix]
+        public static void OnUpdatePostFix(PartComponentModule_ResourceConverter __instance, bool __state)
+        {
+            //System.Diagnostics.Debug.Write("PartComponentModule_ResourceConverter.OnUpdatePostFix: ConverterIsActive=" + __instance._dataResourceConverter.ConverterIsActive);
+            if (!__instance._dataResourceConverter.EnabledToggle.GetValue()) return;
+            if (__instance._dataResourceConverter.ConverterIsActive != __state)
+            {
+                __instance._dataResourceConverter.ConverterIsActive = __state;
+                //System.Diagnostics.Debug.Write("PartComponentModule_ResourceConverter.OnUpdatePostFix: Value fixed! ConverterIsActive=" + __instance._dataResourceConverter.ConverterIsActive);
+            }
         }
 
         /** Cooler **/
 
         /**
-         * Crude but effective fix to the units not displaying.
-         * **/
+         * Fix the units not displaying when the cooler is removing heat.
+         **/
         [HarmonyPatch(typeof(Module_Cooler), nameof(Module_Cooler.SetStatusString))]
         [HarmonyPostfix]
         public static void SetStatusStringPostFix(Module_Cooler __instance)
         {
             if (__instance.dataCooler.currentCoolerState == CoolerStates.REMOVING) {
-                __instance.dataCooler.coolerStatusText.SetValue(__instance.dataCooler.coolerStatusText.GetValue() + " kW");
+                string statusDescription = LocalizationManager.GetTranslation(__instance.dataCooler.currentCoolerState.Description(), true, 0, true, false, (GameObject)null, (string)null, true);
+                string energyRemoved = Units.PrintSI(__instance.dataCooler.fluxRemoved * 1000.0, "W", 3);
+                __instance.dataCooler.coolerStatusText.SetValue(statusDescription + " " + energyRemoved);
             }
         }
 
         /**
-         * Fix the cooler removing heat when it's retracted.
-         * [Warning:  HarmonyX] AccessTools.DeclaredMethod: Could not find method for type KSP.Sim.impl.PartComponentModule_Cooler and name CoolerOperational and parameters 
-[Error  :  Meltdown] HarmonyLib.HarmonyException: Patching exception in method null ---> System.ArgumentException: Undefined target method for patch method static void Meltdown.MeltdownPlugin::CoolerOperationalPostFix(KSP.Sim.impl.PartComponentModule_Cooler __instance, Boolean& __result)
-         * **/
-        //[HarmonyPatch(typeof(PartComponentModule_Cooler), nameof(PartComponentModule_Cooler.CoolerOperational))]
-        //[HarmonyPostfix]
-        //public static void CoolerOperationalPostFix(ref bool __result)
-        //{
-        //    System.Diagnostics.Debug.Write("CoolerOperationalPostFix: __result=" + __result);
-        //}
+         * Increase the energy applied x100. Doesn't work! Or doest it?
+         **/
+        [HarmonyPatch(typeof(PartComponentModule_Cooler), nameof(PartComponentModule_Cooler.EnergyApplied))]
+        [HarmonyPostfix]
+        [HarmonyPatch(MethodType.Getter)]
+        public static void EnergyAppliedPostFix(ref double __result, PartComponentModule_Cooler __instance)
+        {
+            __result = __result * 100;
+            System.Diagnostics.Debug.Write("EnergyAppliedPostFix: __result=" + __result);
+        }
 
         /** Active Radiator **/
 
         /**
-         * Fix the radiator removing heat when it's retracted.
-         * **/
+         * ...
+         **/
         [HarmonyPatch(typeof(PartComponentModule_ActiveRadiator), nameof(PartComponentModule_ActiveRadiator.OnUpdate))]
         [HarmonyPostfix]
         public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, PartComponentModule_ActiveRadiator __instance)
         {
-            System.Diagnostics.Debug.Write("OnUpdatePostFix: currentCoolerState=" + __instance.dataCooler.currentCoolerState);
-            if (__instance.dataCooler.currentCoolerState == CoolerStates.RETRACTED) { }// to be tested x2
 
-            //__instance.dataCooler.fluxRemoved = 0.0;
-            else
-            {
-                //__instance.dataCooler.fluxRemoved = 200.0; // provisoire, ne pas le fixer
-            }
-             //System.Diagnostics.Debug.Write("OnUpdatePostFix: fluxRemoved=" + __instance.dataCooler.fluxRemoved);
-         }
+        }
 
         /**
          * Define the currentCoolerState on initializing the radiator. It's OFF in the OAB, and RETRACTED by default when in flight.
-         * **/
+         **/
         [HarmonyPatch(typeof(Module_ActiveRadiator), nameof(Module_ActiveRadiator.OnInitialize))]
         [HarmonyPostfix]
         public static void OnInitializePostFix(Module_ActiveRadiator __instance)
@@ -112,33 +144,95 @@ namespace Meltdown
 
         /** Thermal Component **/
 
-        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
+        /**
+         * Add all radiator parts in the list of coolers. They will be taken into account later on (in OnUpdate) for the dissipation.
+         **/
+        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnStart))]
         [HarmonyPostfix]
-        public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance)
+        public static void OnStartPostFix(double universalTime, ThermalComponent __instance)
         {
-            int count = __instance._coolingModules.Count;
-            System.Diagnostics.Debug.Write("ThermalComponent.OnUpdatePostFix: count=" + count); // 0
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                ThermalData thermalData = part.ThermalData;
+                PartComponentModule_ActiveRadiator module;
+                if (part.TryGetModule<PartComponentModule_ActiveRadiator>(out module))
+                {
+                    //System.Diagnostics.Debug.Write("ThermalComponent.OnStartPostFix: " + part.PartName + " is a cooler (active radiator)"); // ok
+                    __instance._coolingModules.AddUnique<PartComponentModule_Cooler>(module);
+                }
+
+            }
+
+        }
+
+        /**
+         * The heat removing part is supposed to be done by ThermalComponentJob.FinalizeJob but for some reason this code doesn't seem to do what it is supposed to.
+         * I was unable to get it to work as it's not patchable, so I'm doing this hask instead: altering the OtherFlux (containing de heat generated) to take into account the heat removed by the radiators.
+         * 
+         * Prefix because it needs to run before the thermal jobs.
+         **/
+        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
+        [HarmonyPrefix]
+        public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance)
+        {
+            foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
+            {
+                /**
+                 * Increase the energy removed by the coolers x100x1000
+                 * - x100 to counteract PartComponentModule_Cooler.EnergyApplied that cannot be patched.
+                 * - x1000 to counteract ThermalComponentJob.FinalizeJob.Execute that cannot be patched.
+                 **/
+                part.ThermalData.CoolingEnergyToApply *= 100000; // still useful?
+                /**
+                 * Removes from each part of the ship the energy diffused by each radiator.
+                 * x100 to counteract PartComponentModule_Cooler.EnergyApplied that cannot be patched.
+                 **/
+                //if (part.ThermalData.EnvironmentFlux == 0) break; // if the part's temperature is equal to that of the environnement, there's no heat to radiate. // not working
+                int count = __instance._coolingModules.Count;
                 while (count-- > 0)
                 {
-                    __instance._coolingModules[count].ThermalCooling(__instance._deltaUniverseTime);
-                    System.Diagnostics.Debug.Write("ThermalComponent.OnUpdatePostFix: [" + count + "]/CoolerOperational=" + __instance._coolingModules[count].CoolerOperational);
-                    System.Diagnostics.Debug.Write("ThermalComponent.OnUpdatePostFix: [" + count + "]/EnergyApplied=" + __instance._coolingModules[count].EnergyApplied);
+                    if (!__instance._coolingModules[count].CoolerOperational) break;
+                    part.ThermalData.OtherFlux -= __instance._coolingModules[count].EnergyApplied * 100;
+                    //System.Diagnostics.Debug.Write("ThermalComponent.OnUpdatePreFix: Removing " + (__instance._coolingModules[count].EnergyApplied * 100) + " kW from " + part.PartName + ".OtherFlux");
                 }
-                System.Diagnostics.Debug.Write("ThermalComponent.OnUpdatePostFix: " + part.Name + "/CoolingEnergyToApply=" + thermalData.CoolingEnergyToApply); // retourne 0 !
             }
-            
-            
+
         }
+
+        [HarmonyPatch(typeof(IterationJob), nameof(IterationJob.Execute))]
+        [HarmonyPostfix]
+        public static void ExecutePostFix(int index, ref IterationJob __instance)
+        {
+        //    ThermalData thermalData = __instance.PartData[index];
+        //    if (thermalData.RemovedFlux > 0.0)
+        //    {
+        //        thermalData.Temperature -= thermalData.RemovedFlux * __instance.DeltaUniversalTime;
+        //        thermalData.Temperature = math.max(thermalData.Temperature, (double)__instance.BodyAltitudeTemperature);
+        //        __instance.PartData[index] = thermalData;
+                System.Diagnostics.Debug.Write("IterationJob.ExecutePostFix: running");
+        //    }
+        }
+
+        //[HarmonyPatch(typeof(FinalizeJob), nameof(FinalizeJob.Execute))]
+        //[HarmonyPostfix]
+        //public static void ExecutePostFix(int index, ref FinalizeJob __instance) // is not executed
+        //{
+        //    ThermalData thermalData = __instance.PartData[index];
+        //    if (thermalData.RemovedFlux > 0.0)
+        //    {
+        //        thermalData.Temperature -= thermalData.RemovedFlux * __instance.DeltaUniversalTime;
+        //        thermalData.Temperature = math.max(thermalData.Temperature, (double)__instance.BodyAltitudeTemperature);
+        //        __instance.PartData[index] = thermalData;
+        //        System.Diagnostics.Debug.Write("FinalizeJob.ExecutePostFix: deltaTemp=" + thermalData.RemovedFlux * __instance.DeltaUniversalTime);
+        //    }
+        //}
+
 
         /** Heatshield **/
 
-        /**
-            * Permet de multiplier par 8 l'effet ablatif de la friction de l'air sur le bouclier thermique.
-            * **/
-        [HarmonyPatch(typeof(PartComponentModule_Heatshield), nameof(PartComponentModule_Heatshield.ResourceConsumptionUpdate))]
+                /**
+                    * Permet de multiplier par 8 l'effet ablatif de la friction de l'air sur le bouclier thermique.
+                    * **/
+                [HarmonyPatch(typeof(PartComponentModule_Heatshield), nameof(PartComponentModule_Heatshield.ResourceConsumptionUpdate))]
         [HarmonyPostfix]
         public static void ResourceConsumptionUpdatePostFix(PartComponentModule_Heatshield __instance)
         {

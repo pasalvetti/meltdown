@@ -1,6 +1,9 @@
-﻿using KSP.Game;
+﻿using KSP;
+using KSP.Game;
+using KSP.Iteration.UI.Binding;
 using KSP.Logging;
 using KSP.Sim.impl;
+using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
 
 namespace Meltdown.Modules
 {
@@ -24,7 +27,15 @@ namespace Meltdown.Modules
 
         public override void OnUpdate(double universalTime, double deltaUniversalTime)
         {
-            this._dataThermal.TemperatureTxt.SetValue(Convert.ToInt32(this.Part.Temperature).ToString() + " K");
+            this._dataThermal.TemperatureTxt.SetValue(Units.PrintSI(this.Part.Temperature, "K", 3));
+
+            this._dataThermal.EnvironmentFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.EnvironmentFlux * 1000.0, "W", 3));
+            this._dataThermal.SolarFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.SolarFlux * 1000.0, "W", 3));
+            this._dataThermal.ReentryFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.ReentryFlux * 1000.0, "W", 3));
+            this._dataThermal.ExhaustFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.ExhaustFlux * 1000.0, "W", 3));
+            this._dataThermal.otherFluxTxt.SetValue(Units.PrintSI(this.Part.ThermalData.OtherFlux * 1000.0, "W", 3));
+            
+            this._dataThermal.CoolingEnergyToApplyTxt.SetValue(Units.PrintSI(this.Part.ThermalData.CoolingEnergyToApply * -1000, "W", 3)); // radiators
         }
     }
 }
