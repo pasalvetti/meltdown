@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "4W84J3V5WxY=",
+  "success": false,
+  "projectFilePath": "K:\\Documents\\Affaires courantes\\Projets\\KSP2 Modding\\Mods\\Meltdown\\Code\\src\\Meltdown\\Meltdown.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to read project information for 'Meltdown': Invalid framework identifier ''."
+    }
+  ]
+}

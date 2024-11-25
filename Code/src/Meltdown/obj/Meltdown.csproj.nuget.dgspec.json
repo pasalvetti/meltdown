@@ -1,0 +1,25 @@
+{
+  "format": 1,
+  "restore": {
+    "K:\\Documents\\Affaires courantes\\Projets\\KSP2 Modding\\Mods\\Meltdown\\Code\\src\\Meltdown\\Meltdown.csproj": {}
+  },
+  "projects": {
+    "K:\\Documents\\Affaires courantes\\Projets\\KSP2 Modding\\Mods\\Meltdown\\Code\\src\\Meltdown\\Meltdown.csproj": {
+      "restore": {
+        "projectUniqueName": "K:\\Documents\\Affaires courantes\\Projets\\KSP2 Modding\\Mods\\Meltdown\\Code\\src\\Meltdown\\Meltdown.csproj",
+        "projectPath": "K:\\Documents\\Affaires courantes\\Projets\\KSP2 Modding\\Mods\\Meltdown\\Code\\src\\Meltdown\\Meltdown.csproj",
+        "packagesPath": "C:\\Users\\pasal\\.nuget\\packages\\",
+        "outputPath": "K:\\Documents\\Affaires courantes\\Projets\\KSP2 Modding\\Mods\\Meltdown\\Code\\src\\Meltdown\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\pasal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        }
+      }
+    }
+  }
+}
