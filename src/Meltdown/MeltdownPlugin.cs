@@ -1,9 +1,13 @@
 ﻿using HarmonyLib;
 using I2.Loc;
 using KSP;
+using KSP.Iteration.UI.Binding;
 using KSP.Modules;
 using KSP.Sim.impl;
+using Meltdown.Modules;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
+using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
 
 namespace Meltdown
 {
@@ -12,19 +16,58 @@ namespace Meltdown
 
         /** Module_Generator **/
 
+        /**
+         * Enable heat generation for generators.
+         * Prefix so that the field gets displayed in SetPAMVisibility().
+         **/
         [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.OnInitialize))]
-        [HarmonyPostfix]
-        static public void OnInitializePostFix(Module_Generator __instance) // tourne
+        [HarmonyPrefix]
+        static public void OnInitializePreFix(Module_Generator __instance) // tourne
         {
             __instance.dataGenerator.AutoShutdown = true; // utile ?
-            __instance.dataGenerator.FluxGenerated = 30000; // la valeur qui permet d'activer l'augmentation de la température (100 000 = explose en 1 s)
+            __instance.dataGenerator.FluxGenerated = 300;
+            //if (__instance.part != null && __instance.part.Model != null && !__instance.part.Model.ThermalData.Equals(null))
+            //{
+            //    __instance.part.Model.ThermalData.ThermalMass = 25;
+            //    System.Diagnostics.Debug.Write("Module_Generator.OnInitialize: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass); // ok
+            //}
+
         }
 
+        [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.ThermalUpdate))]
+        [HarmonyPostfix]
+        public static void ThermalUpdatePostFix(double deltaTime, Module_Generator __instance)
+        {
+            //if (__instance._engineStatus!=null)
+            //{
+            //    System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: normalizedOutput=" + __instance._engineStatus.normalizedOutput);
+            //} else
+            //{
+            //    System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: _engineStatus est null");
+            //}
+            //System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
+            //__instance.part.Model.ThermalData.OtherFlux *= 10; // for balance
+            //System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass); // 1000
+        }
 
+        //[HarmonyPatch(typeof(PartComponentModule_Generator), nameof(PartComponentModule_Generator.OnStart))]
+        //[HarmonyPostfix]
+        //public static void OnStartPostFix(double universalTime, PartComponentModule_Generator __instance)
+        //{
+        //    PartComponentModule_Thermal thermalComponent;
+        //    if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out thermalComponent))
+        //    {
+        //        System.Diagnostics.Debug.Write("PartComponentModule_Generator.OnStartPostFix: thermal found.");
+        //        if (thermalComponent._dataThermal != null) // no
+        //        {
+        //            System.Diagnostics.Debug.Write("PartComponentModule_Generator.OnStartPostFix: thermalMass=" + thermalComponent._dataThermal.thermalMass);
+        //            __instance.Part.ThermalData.ThermalMass = thermalComponent._dataThermal.thermalMass;
+        //        }
 
-
-
-
+        //    }
+        // }
+        
+    
 
 
 
@@ -33,9 +76,10 @@ namespace Meltdown
 
         [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.OnInitialize))]
         [HarmonyPostfix]
-        static public void OnInitializePostFix(Module_ResourceConverter __instance) // tourne
+        static public void OnInitializePostFix(Module_ResourceConverter __instance)
         {
-            __instance._dataResourceConverter.FluxGenerated = 300; // la valeur qui permet d'activer l'augmentation de la température
+            __instance._dataResourceConverter.FluxGenerated = 300; // this is what enables heat generation for resource converters
+            //System.Diagnostics.Debug.Write("Module_ResourceConverter.OnInitialize: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass);
         }
 
         [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.OnToggleChangedValue))]
@@ -58,7 +102,7 @@ namespace Meltdown
             {
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
-            
+            //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
         }
 
         /**
@@ -166,7 +210,6 @@ namespace Meltdown
                 {
                     __instance._coolingModules.AddUnique<PartComponentModule_Cooler>(module);
                 }
-
             }
         }
 
@@ -175,14 +218,14 @@ namespace Meltdown
          **/
         private static bool isGeneretingHeat(PartComponent part)
         {
-            PartComponentModule_ResourceConverter module;
-            bool flagResourceConverter = part.TryGetModule<PartComponentModule_ResourceConverter>(out module) && module._dataResourceConverter.ConverterIsActive && module._dataResourceConverter.conversionRate.GetValue() != 0;
+            bool flagResourceConverter = part.TryGetModule<PartComponentModule_ResourceConverter>(out PartComponentModule_ResourceConverter module) && module._dataResourceConverter.ConverterIsActive && module._dataResourceConverter.conversionRate.GetValue() != 0;
+            bool flagGenerator = part.TryGetModule<PartComponentModule_Generator>(out _);
             //if (!flagResourceConverter && module != null)
             //{
             //    System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " ConverterIsActive=" + module._dataResourceConverter.ConverterIsActive);
             //    System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " conversionRate=" + module._dataResourceConverter.conversionRate.GetValue());
             //}
-            return flagResourceConverter;
+            return flagResourceConverter || flagGenerator;
         }
 
         private static int getNumberOfHeatingParts(ThermalComponent __instance)
@@ -207,10 +250,11 @@ namespace Meltdown
          **/
         [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
         [HarmonyPrefix]
-        public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance)
+        public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref int __state)
         {
             int numnberOfRadiators = __instance._coolingModules.Count;
             int numberOfHeatingParts = getNumberOfHeatingParts(__instance);
+            __state = numberOfHeatingParts;
             //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfHeatingParts=" + numberOfHeatingParts);
             if (numberOfHeatingParts * numnberOfRadiators == 0) return; // if no part is generating heat, or if there's no radiator, there's no heat to dissipate
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
@@ -222,10 +266,30 @@ namespace Meltdown
                 {
                     if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
                     part.ThermalData.OtherFlux -= (__instance._coolingModules[i].EnergyApplied * 100 / numberOfHeatingParts);
+                    
                     //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux fixed: " + part.ThermalData.OtherFlux);
                 }
             }
 
+        }
+
+        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
+        [HarmonyPostfix]
+        public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref int __state)
+        {
+            int numberOfHeatingParts = __state;
+            foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
+            {
+                //part.ThermalData.CoolingDemand = 0; // this is blocking cooling in FinalizeJob.Execute since it's only working for generators
+                if (numberOfHeatingParts != 0) //ne fonctionne pas bien car les générateurs ne sont pas considérés comme heating part
+                {
+                    part.ThermalData.CoolingEnergyToApply = part.ThermalData.CoolingEnergyToApply / numberOfHeatingParts; // mainly for the display in the debug window, but has an effect on FinalizeJob.Execute as well
+                }
+                else
+                {
+                    part.ThermalData.CoolingEnergyToApply = 0.0;
+                }
+            }
         }
 
 
@@ -237,13 +301,12 @@ namespace Meltdown
 
 
 
+            /** Heatshield **/
 
-        /** Heatshield **/
-
-        /**
-        * Permet de multiplier par 8 l'effet ablatif de la friction de l'air sur le bouclier thermique.
-        * **/
-        [HarmonyPatch(typeof(PartComponentModule_Heatshield), nameof(PartComponentModule_Heatshield.ResourceConsumptionUpdate))]
+            /**
+            * Permet de multiplier par 8 l'effet ablatif de la friction de l'air sur le bouclier thermique.
+            * **/
+            [HarmonyPatch(typeof(PartComponentModule_Heatshield), nameof(PartComponentModule_Heatshield.ResourceConsumptionUpdate))]
         [HarmonyPostfix]
         public static void ResourceConsumptionUpdatePostFix(PartComponentModule_Heatshield __instance)
         {
