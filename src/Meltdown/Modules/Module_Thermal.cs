@@ -28,11 +28,11 @@ namespace Meltdown.Modules
         private void UpdatePAMVisibility()
         {
             if (this == null || this._dataThermal == null) return;
-            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.TemperatureTxt, PartBackingMode == PartBackingModes.Flight); // field is still showing in the OAB
+            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.TemperatureTxt, PartBackingMode == PartBackingModes.Flight);
             this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.EnvironmentFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
-            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.SolarFluxTxt, false);
-            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.ReentryFluxTxt, false);
-            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.ExhaustFluxTxt, false);
+            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.SolarFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
+            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.ReentryFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
+            this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.ExhaustFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
             this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.otherFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
             this._dataThermal.SetVisible((IModuleDataContext)this._dataThermal.CoolingEnergyToApplyTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
         }
