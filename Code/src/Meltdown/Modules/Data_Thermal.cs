@@ -44,5 +44,7 @@ namespace Meltdown.Modules
 
         private static string GetConversionOutputString(object valueObj) => (string)valueObj;
 
+        public bool isHeating = false;
+
     }
 }

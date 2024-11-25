@@ -9,7 +9,7 @@ namespace Meltdown.Modules
 {
     public class PartComponentModule_Thermal : PartComponentModule
     {
-        protected Data_Thermal _dataThermal;
+        public Data_Thermal _dataThermal;
 
         public override Type PartBehaviourModuleType => typeof(Module_Thermal);
 

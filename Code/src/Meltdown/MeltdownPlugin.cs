@@ -2,6 +2,7 @@
 using I2.Loc;
 using KSP;
 using KSP.Iteration.UI.Binding;
+using KSP.Logging;
 using KSP.Modules;
 using KSP.Sim.impl;
 using Meltdown.Modules;
@@ -13,6 +14,20 @@ namespace Meltdown
 {
     internal class MeltdownPlugin
     {
+
+        private static void SetIsHeating(PartComponentModule __instance, bool isHeating)
+        {
+            if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent))
+            {
+                if (thermalComponent._dataThermal == null) return;
+                System.Diagnostics.Debug.Write("SetIsHeating: thermal found");
+                thermalComponent._dataThermal.isHeating = isHeating;
+            }
+            else
+            {
+                System.Diagnostics.Debug.Write("SetIsHeating: could not find Thermal");
+            }
+        }
 
         /** Module_Generator **/
 
@@ -26,46 +41,17 @@ namespace Meltdown
         {
             __instance.dataGenerator.AutoShutdown = true; // utile ?
             __instance.dataGenerator.FluxGenerated = 300;
-            //if (__instance.part != null && __instance.part.Model != null && !__instance.part.Model.ThermalData.Equals(null))
-            //{
-            //    __instance.part.Model.ThermalData.ThermalMass = 25;
-            //    System.Diagnostics.Debug.Write("Module_Generator.OnInitialize: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass); // ok
-            //}
-
         }
 
-        [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.ThermalUpdate))]
+        /**
+         * Marks the generator as a heat-generating part.
+         **/
+        [HarmonyPatch(typeof(PartComponentModule_Generator), nameof(PartComponentModule_Generator.OnUpdate))]
         [HarmonyPostfix]
-        public static void ThermalUpdatePostFix(double deltaTime, Module_Generator __instance)
+        public static void OnUpdatePostFix(double universalTime, PartComponentModule_Generator __instance)
         {
-            //if (__instance._engineStatus!=null)
-            //{
-            //    System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: normalizedOutput=" + __instance._engineStatus.normalizedOutput);
-            //} else
-            //{
-            //    System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: _engineStatus est null");
-            //}
-            //System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
-            //__instance.part.Model.ThermalData.OtherFlux *= 10; // for balance
-            //System.Diagnostics.Debug.Write("Module_Generator.ThermalUpdatePostFix: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass); // 1000
+            SetIsHeating(__instance, true); // a generator is always heating
         }
-
-        //[HarmonyPatch(typeof(PartComponentModule_Generator), nameof(PartComponentModule_Generator.OnStart))]
-        //[HarmonyPostfix]
-        //public static void OnStartPostFix(double universalTime, PartComponentModule_Generator __instance)
-        //{
-        //    PartComponentModule_Thermal thermalComponent;
-        //    if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out thermalComponent))
-        //    {
-        //        System.Diagnostics.Debug.Write("PartComponentModule_Generator.OnStartPostFix: thermal found.");
-        //        if (thermalComponent._dataThermal != null) // no
-        //        {
-        //            System.Diagnostics.Debug.Write("PartComponentModule_Generator.OnStartPostFix: thermalMass=" + thermalComponent._dataThermal.thermalMass);
-        //            __instance.Part.ThermalData.ThermalMass = thermalComponent._dataThermal.thermalMass;
-        //        }
-
-        //    }
-        // }
         
     
 
@@ -101,7 +87,9 @@ namespace Meltdown
             if (__instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.FluxGenerated > 0.0)
             {
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
-            }
+            } 
+            SetIsHeating(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0); // marks as heating if the converter is on and has a rate > 0
+
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
         }
 
@@ -216,16 +204,15 @@ namespace Meltdown
         /**
          * Return true if the part is generating heat.
          **/
-        private static bool isGeneretingHeat(PartComponent part)
+        private static bool IsGeneretingHeat(PartComponent part)
         {
-            bool flagResourceConverter = part.TryGetModule<PartComponentModule_ResourceConverter>(out PartComponentModule_ResourceConverter module) && module._dataResourceConverter.ConverterIsActive && module._dataResourceConverter.conversionRate.GetValue() != 0;
-            bool flagGenerator = part.TryGetModule<PartComponentModule_Generator>(out _);
-            //if (!flagResourceConverter && module != null)
-            //{
-            //    System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " ConverterIsActive=" + module._dataResourceConverter.ConverterIsActive);
-            //    System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " conversionRate=" + module._dataResourceConverter.conversionRate.GetValue());
-            //}
-            return flagResourceConverter || flagGenerator;
+            if (part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule))
+            {
+                if (thermalModule._dataThermal == null) return false;
+                System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " yes !");
+                return thermalModule._dataThermal.isHeating;
+            }
+            return false;
         }
 
         private static int getNumberOfHeatingParts(ThermalComponent __instance)
@@ -233,7 +220,7 @@ namespace Meltdown
             int numberOfHeatingParts = 0;
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                if (isGeneretingHeat(part)) numberOfHeatingParts++;
+                if (IsGeneretingHeat(part)) numberOfHeatingParts++;
             }
             return numberOfHeatingParts;
         }
@@ -261,7 +248,7 @@ namespace Meltdown
             {
                 int i = numnberOfRadiators;
                 //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux before fix: " + part.ThermalData.OtherFlux);
-                if (!isGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
+                if (!IsGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
                 while (i-- > 0)
                 {
                     if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
