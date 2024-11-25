@@ -1,6 +1,6 @@
 
-/.vs
-/build
-/dist
-/plugin_template/.vs
-/scripts
+Code/.vs
+Code/build
+Code/dist
+Code/plugin_template/.vs
+Code/scripts
