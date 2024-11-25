@@ -177,7 +177,22 @@ namespace Meltdown
         {
             PartComponentModule_ResourceConverter module;
             bool flagResourceConverter = part.TryGetModule<PartComponentModule_ResourceConverter>(out module) && module._dataResourceConverter.ConverterIsActive && module._dataResourceConverter.conversionRate.GetValue() != 0;
+            //if (!flagResourceConverter && module != null)
+            //{
+            //    System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " ConverterIsActive=" + module._dataResourceConverter.ConverterIsActive);
+            //    System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " conversionRate=" + module._dataResourceConverter.conversionRate.GetValue());
+            //}
             return flagResourceConverter;
+        }
+
+        private static int getNumberOfHeatingParts(ThermalComponent __instance)
+        {
+            int numberOfHeatingParts = 0;
+            foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
+            {
+                if (isGeneretingHeat(part)) numberOfHeatingParts++;
+            }
+            return numberOfHeatingParts;
         }
 
         /**
@@ -194,15 +209,20 @@ namespace Meltdown
         [HarmonyPrefix]
         public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance)
         {
-            int count = __instance._coolingModules.Count;
-            if (count == 0) return;
+            int numnberOfRadiators = __instance._coolingModules.Count;
+            int numberOfHeatingParts = getNumberOfHeatingParts(__instance);
+            //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfHeatingParts=" + numberOfHeatingParts);
+            if (numberOfHeatingParts * numnberOfRadiators == 0) return; // if no part is generating heat, or if there's no radiator, there's no heat to dissipate
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
+                int i = numnberOfRadiators;
+                //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux before fix: " + part.ThermalData.OtherFlux);
                 if (!isGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
-                while (count-- > 0)
+                while (i-- > 0)
                 {
-                    if (!__instance._coolingModules[count].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
-                    part.ThermalData.OtherFlux -= __instance._coolingModules[count].EnergyApplied * 100;
+                    if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
+                    part.ThermalData.OtherFlux -= (__instance._coolingModules[i].EnergyApplied * 100 / numberOfHeatingParts);
+                    //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux fixed: " + part.ThermalData.OtherFlux);
                 }
             }
 
