@@ -1,0 +1,7 @@
+:parts {
+    .Module_Generator, .Module_ResourceConverter {
+        +Module_Thermal {
+            +Data_Thermal {}
+        }
+    }
+}

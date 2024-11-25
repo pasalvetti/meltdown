@@ -1,0 +1,9 @@
+Key,Type,Desc,English
+
+PartModules/Thermal/Temperature,Text,,Temperature
+PartModules/Thermal/EnvironmentFlux,Text,,Environnement
+PartModules/Thermal/SolarFlux,Text,,Solar
+PartModules/Thermal/ReentryFlux,Text,,Reentry
+PartModules/Thermal/ExhaustFlux,Text,,Exhaust
+PartModules/Thermal/OtherFlux,Text,,Internal
+PartModules/Thermal/CoolingEnergyToApply,Text,,Radiators
