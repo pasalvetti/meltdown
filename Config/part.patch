@@ -1,5 +1,5 @@
 :parts {
-    .Module_Generator, .Module_ResourceConverter {
+    .Module_Generator, .Module_ResourceConverter, .Module_Command {
         +Module_Thermal {
             +Data_Thermal {}
         }

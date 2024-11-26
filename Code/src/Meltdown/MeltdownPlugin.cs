@@ -288,12 +288,44 @@ namespace Meltdown
 
 
 
-            /** Heatshield **/
 
-            /**
-            * Permet de multiplier par 8 l'effet ablatif de la friction de l'air sur le bouclier thermique.
-            * **/
-            [HarmonyPatch(typeof(PartComponentModule_Heatshield), nameof(PartComponentModule_Heatshield.ResourceConsumptionUpdate))]
+
+
+        /** Command **/
+
+        [HarmonyPatch(typeof(PartComponentModule_Command), nameof(PartComponentModule_Command.OnUpdate))]
+        [HarmonyPostfix]
+        public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, PartComponentModule_Command __instance)
+        {
+            if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule))
+            {
+                if (thermalModule._dataThermal == null) return;
+                thermalModule.SetFlux(10);
+                //System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " yes !");
+                //return thermalModule._dataThermal.isHeating;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /** Heatshield **/
+
+        /**
+        * Permet de multiplier par 8 l'effet ablatif de la friction de l'air sur le bouclier thermique.
+        * **/
+        [HarmonyPatch(typeof(PartComponentModule_Heatshield), nameof(PartComponentModule_Heatshield.ResourceConsumptionUpdate))]
         [HarmonyPostfix]
         public static void ResourceConsumptionUpdatePostFix(PartComponentModule_Heatshield __instance)
         {
