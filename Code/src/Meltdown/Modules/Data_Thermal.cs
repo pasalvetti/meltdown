@@ -25,30 +25,25 @@ namespace Meltdown.Modules
         [PAMDisplayControl(SortIndex = 3)]
         public ModuleProperty<string> EnvironmentFluxTxt = new ModuleProperty<string>("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
 
-
         [LocalizedField("PartModules/Thermal/SolarFlux")]
         [PAMDisplayControl(SortIndex = 4)]
         public ModuleProperty<string> SolarFluxTxt = new ModuleProperty<string>("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
-
 
         [LocalizedField("PartModules/Thermal/ReentryFlux")]
         [PAMDisplayControl(SortIndex = 5)]
         public ModuleProperty<string> ReentryFluxTxt = new ModuleProperty<string>("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
 
-
         [LocalizedField("PartModules/Thermal/ExhaustFlux")]
         [PAMDisplayControl(SortIndex = 6)]
         public ModuleProperty<string> ExhaustFluxTxt = new ModuleProperty<string>("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
-
 
         [LocalizedField("PartModules/Thermal/OtherFlux")]
         [PAMDisplayControl(SortIndex = 7)]
         public ModuleProperty<string> otherFluxTxt = new ModuleProperty<string>("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
 
-
         [LocalizedField("PartModules/Thermal/CoolingEnergyToApply")]
         [PAMDisplayControl(SortIndex = 8)]
-        public ModuleProperty<string> CoolingEnergyToApplyTxt = new ModuleProperty<string>("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
+        public ModuleProperty<string> CoolingEnergyToApplyTxt = new("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
 
         private static string GetConversionOutputString(object valueObj) => (string)valueObj;
 
