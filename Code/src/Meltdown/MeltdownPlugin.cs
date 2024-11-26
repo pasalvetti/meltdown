@@ -20,12 +20,8 @@ namespace Meltdown
             if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent))
             {
                 if (thermalComponent._dataThermal == null) return;
-                System.Diagnostics.Debug.Write("SetIsHeating: thermal found");
+                //System.Diagnostics.Debug.Write("SetIsHeating: thermal found");
                 thermalComponent._dataThermal.isHeating = isHeating;
-            }
-            else
-            {
-                System.Diagnostics.Debug.Write("SetIsHeating: could not find Thermal");
             }
         }
 
@@ -209,7 +205,7 @@ namespace Meltdown
             if (part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule))
             {
                 if (thermalModule._dataThermal == null) return false;
-                System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " yes !");
+                //System.Diagnostics.Debug.Write("isGeneretingHeat: " + part.PartName + " " + part.GlobalId + " yes !");
                 return thermalModule._dataThermal.isHeating;
             }
             return false;
