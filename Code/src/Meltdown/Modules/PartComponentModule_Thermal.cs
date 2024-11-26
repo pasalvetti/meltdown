@@ -49,7 +49,7 @@ namespace Meltdown.Modules
                 return;
             }
             Part.ThermalData.OtherFlux = fluxGenerated;
-            _dataThermal.HeatGeneratedTxt.SetValue(fluxGenerated * 1000);
+            _dataThermal.HeatGeneratedTxt.SetValue(fluxGenerated);
         }
     }
 }
