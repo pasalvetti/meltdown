@@ -4,4 +4,14 @@
             +Data_Thermal {}
         }
     }
+    .Module_Command {
+        PAMModuleVisualsOverride +: [
+            {
+                PartComponentModuleName: "PartComponentModule_Thermal",
+                ModuleDisplayName: "PartModules/Thermal/Name",
+                ShowHeader: true,
+                ShowFooter: true
+            }
+        ];
+    }
 }
