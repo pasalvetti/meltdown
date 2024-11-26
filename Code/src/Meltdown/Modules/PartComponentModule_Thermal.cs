@@ -18,10 +18,10 @@ namespace Meltdown.Modules
         public override void OnStart(double universalTime)
         {
             if (!this.DataModules.TryGetByType<Data_Thermal>(out this._dataThermal))
-                GlobalLog.Error((object)("Unable to find a Data_Thermal in the PartComponentModule for " + this.Part.PartName));
+                GlobalLog.Error((object)("[Meltdown] Unable to find a Data_Thermal in the PartComponentModule for " + this.Part.PartName));
             else if ((UnityEngine.Object)this.Game == (UnityEngine.Object)null || this.Game.ResourceDefinitionDatabase == null)
             {
-                GlobalLog.Error((object)"Unable to find a valid game with a resource definition database");
+                GlobalLog.Error((object)"[Meltdown] Unable to find a valid game with a resource definition database");
             }
         }
 
@@ -45,7 +45,12 @@ namespace Meltdown.Modules
         {
             if (Part == null || Part.ThermalData.Equals(null))
             {
-                GlobalLog.Error((object)("Unable to find the part to heat."));
+                GlobalLog.Error((object)("[Meltdown] Unable to find the part to heat."));
+                return;
+            }
+            if (!_dataThermal.isHeating)
+            {
+                GlobalLog.Error((object)"[Meltdown] You're trying to set up a heating flux to a part not cleared for heating. Please set 'isHeating' to true first.");
                 return;
             }
             Part.ThermalData.OtherFlux = fluxGenerated;
