@@ -30,11 +30,12 @@ namespace Meltdown.Modules
         }
 
         /**
-         * No need to show the heat generated for Resource Converters as it's already done by the stock module.
+         * No need to show the heat generated for Resource Converters and Generators as it's already done by the stock module.
          **/
         private void SetHeatGeneratedVisibility()
         {
-            if (part != null && part.TryGetComponent<Module_ResourceConverter>(out _))
+            if (part == null) { return; }
+            if (part.TryGetComponent<Module_ResourceConverter>(out _) || part.TryGetComponent<Module_Generator>(out _))
             {
                 heatGeneratedVisibility = false;
             }
