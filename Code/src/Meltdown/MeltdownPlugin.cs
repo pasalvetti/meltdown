@@ -32,6 +32,17 @@ namespace Meltdown
             }
         }
 
+
+
+
+
+
+
+
+
+
+
+
         /** Module_Generator **/
 
         /**
@@ -219,14 +230,25 @@ namespace Meltdown
             return false;
         }
 
-        private static int getNumberOfHeatingParts(ThermalComponent __instance)
+        private static double GetTotalThermalEnergy(ThermalComponent __instance)
         {
-            int numberOfHeatingParts = 0;
+            //numberOfHeatingParts = 0;
+            double totalThermalEnergy = 0.0;
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                if (IsGeneretingHeat(part)) numberOfHeatingParts++;
+                if (part.ThermalData.Equals(null)) continue;
+                if (IsGeneretingHeat(part))
+                {
+                    //numberOfHeatingParts++;
+                    totalThermalEnergy += (getTotalThermalEnergyOfPart(part));
+                }
             }
-            return numberOfHeatingParts;
+            return totalThermalEnergy;
+        }
+
+        private static double getTotalThermalEnergyOfPart(PartComponent part)
+        {
+            return part.ThermalData.OtherFlux + part.ThermalData.EnvironmentFlux + part.ThermalData.ExhaustFlux + part.ThermalData.ReentryFlux + part.ThermalData.SolarFlux;
         }
 
         /**
@@ -241,13 +263,13 @@ namespace Meltdown
          **/
         [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
         [HarmonyPrefix]
-        public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref int __state)
+        public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref double __state)
         {
             int numnberOfRadiators = __instance._coolingModules.Count;
-            int numberOfHeatingParts = getNumberOfHeatingParts(__instance);
-            __state = numberOfHeatingParts;
+            double totalThermalEnergy = GetTotalThermalEnergy(__instance);
+            __state = totalThermalEnergy;
             //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfHeatingParts=" + numberOfHeatingParts);
-            if (numberOfHeatingParts * numnberOfRadiators == 0) return; // if no part is generating heat, or if there's no radiator, there's no heat to dissipate
+            if (totalThermalEnergy * numnberOfRadiators == 0) return; // if no part is generating heat, or if there's no radiator, there's no heat to dissipate
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
                 int i = numnberOfRadiators;
@@ -256,7 +278,7 @@ namespace Meltdown
                 while (i-- > 0)
                 {
                     if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
-                    part.ThermalData.OtherFlux -= (__instance._coolingModules[i].EnergyApplied * 100 / numberOfHeatingParts);
+                    part.ThermalData.OtherFlux -= (__instance._coolingModules[i].EnergyApplied * 100 * getTotalThermalEnergyOfPart(part) / totalThermalEnergy);
                     
                     //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux fixed: " + part.ThermalData.OtherFlux);
                 }
