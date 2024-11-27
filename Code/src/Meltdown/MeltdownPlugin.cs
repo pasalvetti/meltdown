@@ -271,10 +271,12 @@ namespace Meltdown
             int numberOfHeatingParts = __state;
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                part.ThermalData.CoolingEnergyToApply = 0.0;
                 if (numberOfHeatingParts != 0 && IsGeneretingHeat(part))
                 {
                     part.ThermalData.CoolingEnergyToApply = part.ThermalData.CoolingEnergyToApply / numberOfHeatingParts; // mainly for the display in the debug window, but has an effect on FinalizeJob.Execute as well
+                } else
+                {
+                    part.ThermalData.CoolingEnergyToApply = 0.0;
                 }
             }
         }

@@ -7,6 +7,6 @@ PartModules/Thermal/SolarFlux,Text,,[Debug] Solar
 PartModules/Thermal/ReentryFlux,Text,,[Debug] Reentry
 PartModules/Thermal/ExhaustFlux,Text,,[Debug] Exhaust
 PartModules/Thermal/OtherFlux,Text,,[Debug] Internal
-PartModules/Thermal/CoolingEnergyToApply,Text,,[Debug] Radiators
+PartModules/Thermal/CoolingEnergyToApply,Text,,[Debug] Cooling
 
 PartModules/Thermal/Name,Text,,Thermal
