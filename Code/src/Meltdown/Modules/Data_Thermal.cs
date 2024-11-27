@@ -1,6 +1,7 @@
 ﻿using KSP;
 using KSP.Api;
 using KSP.Modules;
+using KSP.Sim;
 using KSP.Sim.Definitions;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -45,11 +46,16 @@ namespace Meltdown.Modules
         [PAMDisplayControl(SortIndex = 8)]
         public ModuleProperty<string> CoolingEnergyToApplyTxt = new("", true, new ToStringDelegate(Data_Thermal.GetConversionOutputString));
 
+        [KSPDefinition]
+        public double FluxGenerated;
+
         private static string GetConversionOutputString(object valueObj) => (string)valueObj;
 
         private static string GetHeatOutputString(object valueObj) => string.Format("{0:F1} {1}", (object)Math.Abs((double)valueObj), (object)Units.SymbolKiloWatt);
 
         public bool isHeating = false;
+
+        public double energyRemoved;
 
     }
 }

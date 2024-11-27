@@ -46,7 +46,7 @@ namespace Meltdown.Modules
             if (_dataThermal == null) return;
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.HeatGeneratedTxt, heatGeneratedVisibility && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.TemperatureTxt, PartBackingMode == PartBackingModes.Flight);
-            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.EnvironmentFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);
+            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.EnvironmentFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.SolarFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.ReentryFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.ExhaustFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);

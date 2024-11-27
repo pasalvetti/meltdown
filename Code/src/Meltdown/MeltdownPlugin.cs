@@ -266,42 +266,53 @@ namespace Meltdown
         public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref double __state)
         {
             int numnberOfRadiators = __instance._coolingModules.Count;
+            System.Diagnostics.Debug.Write("OnUpdatePreFix: numnberOfRadiators=" + numnberOfRadiators);
             double totalThermalEnergy = GetTotalThermalEnergy(__instance);
+            System.Diagnostics.Debug.Write("OnUpdatePreFix: totalThermalEnergy=" + totalThermalEnergy);
             __state = totalThermalEnergy;
             //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfHeatingParts=" + numberOfHeatingParts);
             if (totalThermalEnergy * numnberOfRadiators == 0) return; // if no part is generating heat, or if there's no radiator, there's no heat to dissipate
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
                 int i = numnberOfRadiators;
-                //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux before fix: " + part.ThermalData.OtherFlux);
+                System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " getTotalThermalEnergyOfPart=" + getTotalThermalEnergyOfPart(part));
                 if (!IsGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
+                double energyRemoved = 0.0;
                 while (i-- > 0)
                 {
                     if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
-                    part.ThermalData.OtherFlux -= (__instance._coolingModules[i].EnergyApplied * 100 * getTotalThermalEnergyOfPart(part) / totalThermalEnergy);
+                    energyRemoved += (__instance._coolingModules[i].EnergyApplied * 100 * getTotalThermalEnergyOfPart(part) / totalThermalEnergy);
                     
                     //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux fixed: " + part.ThermalData.OtherFlux);
                 }
-            }
-
-        }
-
-        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
-        [HarmonyPostfix]
-        public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref int __state)
-        {
-            int numberOfHeatingParts = __state;
-            foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
-            {
-                if (numberOfHeatingParts != 0 && IsGeneretingHeat(part))
+                if (part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule))
                 {
-                    part.ThermalData.CoolingEnergyToApply = part.ThermalData.CoolingEnergyToApply / numberOfHeatingParts; // mainly for the display in the debug window, but has an effect on FinalizeJob.Execute as well
-                } else
-                {
-                    part.ThermalData.CoolingEnergyToApply = 0.0;
+                    if (thermalModule._dataThermal == null) continue;
+                    thermalModule._dataThermal.energyRemoved = energyRemoved; // we store the removed energy for display on the debug window
                 }
+                part.ThermalData.OtherFlux -= energyRemoved; // we substract the removed energy in the other flux (dirty hack)
             }
+
         }
+
+        //[HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
+        //[HarmonyPostfix]
+        //public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref double __state)
+        //{
+        //    double totalThermalEnergy = __state;
+        //    foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
+        //    {
+        //        if (totalThermalEnergy != 0 && IsGeneretingHeat(part))
+        //        {
+        //            System.Diagnostics.Debug.Write("OnUpdatePostFix: " + part.PartName + " " + part.GlobalId + " CoolingEnergyToApply (before)=" + part.ThermalData.CoolingEnergyToApply);
+        //            part.ThermalData.CoolingEnergyToApply = part.ThermalData.CoolingEnergyToApply * getTotalThermalEnergyOfPart(part) / totalThermalEnergy; // mainly for the display in the debug window, but has an effect on FinalizeJob.Execute as well
+        //            System.Diagnostics.Debug.Write("OnUpdatePostFix: " + part.PartName + " " + part.GlobalId + " CoolingEnergyToApply (after)=" + part.ThermalData.CoolingEnergyToApply);
+        //        } else
+        //        {
+        //            part.ThermalData.CoolingEnergyToApply = 0.0;
+        //        }
+        //    }
+        //}
 
 
 
