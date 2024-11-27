@@ -17,17 +17,17 @@ namespace Meltdown
 
         /**
          * Sets the 'isHeating' flag, used to mark the part as heating or not when calculating the radiators' influence.
-         * Also sets the flux (in kW). If no flux is to be set, use 0.0 (only to be used if the stock game already generates the flux).
+         * Also sets the flux (in kW). If no flux is to be set, use usePatchedFlux=false (only to be used if the stock game already generates the flux).
          **/
-        private static void SetThermalFluxData(PartComponentModule __instance, bool isHeating, double flux)
+        private static void SetThermalFluxData(PartComponentModule __instance, bool isHeating, bool usePatchedFlux)
         {
             if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent))
             {
                 if (thermalComponent._dataThermal == null) return;
                 thermalComponent._dataThermal.isHeating = isHeating;
-                if (flux != 0.0)
+                if (usePatchedFlux)
                 {
-                    thermalComponent.SetFlux(flux);
+                    thermalComponent.SetFlux();
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace Meltdown
         [HarmonyPostfix]
         public static void OnUpdatePostFix(double universalTime, PartComponentModule_Generator __instance)
         {
-            SetThermalFluxData(__instance, true, 0.0); // a generator is always heating. The flux is 0.0 because it's already set in the stock module.
+            SetThermalFluxData(__instance, true, false); // a generator is always heating. The flux is 0.0 because it's already set in the stock module.
         }
         
     
@@ -103,7 +103,7 @@ namespace Meltdown
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
             /* Marks as heating if the converter is on and has a rate > 0. The flux is 0.0 because it's already set in the stock module. */
-            SetThermalFluxData(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, 0.0);
+            SetThermalFluxData(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, false);
 
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
         }
@@ -283,16 +283,16 @@ namespace Meltdown
         public static void OnUpdatePreFix(ThermalComponent __instance, ref double __state)
         {
             int numberOfRadiators = __instance._coolingModules.Count;
-            System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfRadiators=" + numberOfRadiators);
+            //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfRadiators=" + numberOfRadiators);
             double totalThermalEnergy = GetTotalThermalEnergy(__instance);
-            System.Diagnostics.Debug.Write("OnUpdatePreFix: totalThermalEnergy=" + totalThermalEnergy);
+            //System.Diagnostics.Debug.Write("OnUpdatePreFix: totalThermalEnergy=" + totalThermalEnergy);
             __state = totalThermalEnergy;
             //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfHeatingParts=" + numberOfHeatingParts);
             if (totalThermalEnergy == 0.0) return; // if no part is generating heat, there's no heat to dissipate
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
                 int i = numberOfRadiators;
-                System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " getTotalThermalEnergyOfPart=" + getTotalThermalEnergyOfPart(part));
+                //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " getTotalThermalEnergyOfPart=" + getTotalThermalEnergyOfPart(part));
                 double energyRemoved = 0.0;
                 if (!IsGeneretingHeat(part))  // if the current part isn't generating heat, there's not heat to dissipate.
                 {
@@ -349,7 +349,7 @@ namespace Meltdown
         [HarmonyPostfix]
         public static void OnUpdatePostFix(PartComponentModule_Command __instance)
         {
-            SetThermalFluxData(__instance, true, 10); // a command pod is always heating
+            SetThermalFluxData(__instance, true, true); // a command pod is always heating
         }
 
 
