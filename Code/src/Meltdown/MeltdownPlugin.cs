@@ -206,8 +206,7 @@ namespace Meltdown
         {
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                PartComponentModule_ActiveRadiator module;
-                if (part.TryGetModule<PartComponentModule_ActiveRadiator>(out module))
+                if (part.TryGetModule<PartComponentModule_ActiveRadiator>(out PartComponentModule_ActiveRadiator module))
                 {
                     __instance._coolingModules.AddUnique<PartComponentModule_Cooler>(module);
                 }
@@ -294,23 +293,23 @@ namespace Meltdown
             {
                 int i = numberOfRadiators;
                 System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " getTotalThermalEnergyOfPart=" + getTotalThermalEnergyOfPart(part));
-                if (!IsGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
                 double energyRemoved = 0.0;
-                while (i-- > 0)
+                if (!IsGeneretingHeat(part))  // if the current part isn't generating heat, there's not heat to dissipate.
                 {
-                    if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
-                    energyRemoved += (__instance._coolingModules[i].EnergyApplied * 100 * getTotalThermalEnergyOfPart(part) / totalThermalEnergy);
-                    
-                    //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux fixed: " + part.ThermalData.OtherFlux);
+                    while (i-- > 0)
+                    {
+                        if (!__instance._coolingModules[i].CoolerOperational) continue; // if the radiator is retracted, move on to the next one
+                        energyRemoved += (__instance._coolingModules[i].EnergyApplied * 100 * getTotalThermalEnergyOfPart(part) / totalThermalEnergy);
+
+                        //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " otherFlux fixed: " + part.ThermalData.OtherFlux);
+                    }
                 }
-                if (part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule))
+                if (part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule) && thermalModule._dataThermal != null)
                 {
-                    if (thermalModule._dataThermal == null) continue;
                     thermalModule._dataThermal.energyRemoved = energyRemoved; // we store the removed energy for display on the debug window
                 }
                 part.ThermalData.OtherFlux -= energyRemoved; // we substract the removed energy in the other flux (dirty hack)
             }
-
         }
 
         //[HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
@@ -351,11 +350,6 @@ namespace Meltdown
         public static void OnUpdatePostFix(PartComponentModule_Command __instance)
         {
             SetThermalFluxData(__instance, true, 10); // a command pod is always heating
-            //if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalModule))
-            //{
-            //    if (thermalModule._dataThermal == null) return;
-            //    thermalModule.SetFlux(10);
-            //}
         }
 
 
