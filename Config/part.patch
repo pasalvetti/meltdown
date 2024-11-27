@@ -35,23 +35,8 @@
         }
     }
 }
-/*
-:parts #pod_1v_conical_crew, #pod_1v_lander_crew {
-    +Module_Thermal {
-        +Data_Thermal {
-            FluxGenerated: 10;
-        }
-    }
-}
 
-:parts #pod_2v_lander_crew, #pod_2v_conical_crew, #pod_2v_cupola_crew {
-    +Module_Thermal {
-        +Data_Thermal {
-            FluxGenerated: 20;
-        }
-    }
-}*/
-
+// all command pods generate heat based on their EC consumption
 @function get-ec-rate($resource-list, $part-name: "none") {
   @each $resource in $resource-list {
     @if $resource[ResourceName] == ElectricCharge {
