@@ -271,14 +271,10 @@ namespace Meltdown
             int numberOfHeatingParts = __state;
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                //part.ThermalData.CoolingDemand = 0; // this is blocking cooling in FinalizeJob.Execute since it's only working for generators
-                if (numberOfHeatingParts != 0) //ne fonctionne pas bien car les générateurs ne sont pas considérés comme heating part
+                part.ThermalData.CoolingEnergyToApply = 0.0;
+                if (numberOfHeatingParts != 0 && IsGeneretingHeat(part))
                 {
                     part.ThermalData.CoolingEnergyToApply = part.ThermalData.CoolingEnergyToApply / numberOfHeatingParts; // mainly for the display in the debug window, but has an effect on FinalizeJob.Execute as well
-                }
-                else
-                {
-                    part.ThermalData.CoolingEnergyToApply = 0.0;
                 }
             }
         }
