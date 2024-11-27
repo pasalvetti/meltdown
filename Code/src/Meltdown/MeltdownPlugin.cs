@@ -294,7 +294,7 @@ namespace Meltdown
                 int i = numberOfRadiators;
                 //System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " getTotalThermalEnergyOfPart=" + getTotalThermalEnergyOfPart(part));
                 double energyRemoved = 0.0;
-                if (!IsGeneretingHeat(part))  // if the current part isn't generating heat, there's not heat to dissipate.
+                if (IsGeneretingHeat(part))  // if the current part is generating heat, there's heat to dissipate.
                 {
                     while (i-- > 0)
                     {
