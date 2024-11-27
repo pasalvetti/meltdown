@@ -202,9 +202,7 @@ namespace Meltdown
         /**
          * Add all radiator parts in the list of coolers. They will be taken into account later on (in OnUpdate) for the dissipation.
          **/
-        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnStart))]
-        [HarmonyPostfix]
-        public static void OnStartPostFix(double universalTime, ThermalComponent __instance)
+        private static void CacheAllRadiatorsAsCoolingModules(ThermalComponent __instance)
         {
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
@@ -214,6 +212,26 @@ namespace Meltdown
                     __instance._coolingModules.AddUnique<PartComponentModule_Cooler>(module);
                 }
             }
+        }
+
+        /**
+         * On component start, all cooling modules gets cached, but not radiators. We need to add them too.
+         **/
+        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnStart))]
+        [HarmonyPostfix]
+        public static void OnStartPostFix(ThermalComponent __instance)
+        {
+            CacheAllRadiatorsAsCoolingModules(__instance);
+        }
+
+        /**
+         * After a part is destroyed, RecacheCoolingModules gets called and clears our list of radiators, so we need to recache them.
+         **/
+        [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.RecacheCoolingModules))]
+        [HarmonyPostfix]
+        private static void RecacheCoolingModulesPostFix(ThermalComponent __instance)
+        {
+            CacheAllRadiatorsAsCoolingModules(__instance);
         }
 
         /**
@@ -263,18 +281,18 @@ namespace Meltdown
          **/
         [HarmonyPatch(typeof(ThermalComponent), nameof(ThermalComponent.OnUpdate))]
         [HarmonyPrefix]
-        public static void OnUpdatePreFix(double universalTime, double deltaUniversalTime, ThermalComponent __instance, ref double __state)
+        public static void OnUpdatePreFix(ThermalComponent __instance, ref double __state)
         {
-            int numnberOfRadiators = __instance._coolingModules.Count;
-            System.Diagnostics.Debug.Write("OnUpdatePreFix: numnberOfRadiators=" + numnberOfRadiators);
+            int numberOfRadiators = __instance._coolingModules.Count;
+            System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfRadiators=" + numberOfRadiators);
             double totalThermalEnergy = GetTotalThermalEnergy(__instance);
             System.Diagnostics.Debug.Write("OnUpdatePreFix: totalThermalEnergy=" + totalThermalEnergy);
             __state = totalThermalEnergy;
             //System.Diagnostics.Debug.Write("OnUpdatePreFix: numberOfHeatingParts=" + numberOfHeatingParts);
-            if (totalThermalEnergy * numnberOfRadiators == 0) return; // if no part is generating heat, or if there's no radiator, there's no heat to dissipate
+            if (totalThermalEnergy == 0.0) return; // if no part is generating heat, there's no heat to dissipate
             foreach (PartComponent part in __instance.SimulationObject.PartOwner.Parts)
             {
-                int i = numnberOfRadiators;
+                int i = numberOfRadiators;
                 System.Diagnostics.Debug.Write("OnUpdatePreFix: " + part.PartName + " " + part.GlobalId + " getTotalThermalEnergyOfPart=" + getTotalThermalEnergyOfPart(part));
                 if (!IsGeneretingHeat(part)) continue; // if the current part isn't generating heat, there's not heat to dissipate.
                 double energyRemoved = 0.0;
