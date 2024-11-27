@@ -1,9 +1,12 @@
+@use "builtin:debug";
 :parts {
-    .Module_Generator, .Module_ResourceConverter, .Module_Command {
+// add Module_Thermal to all generators and resource converters
+    .Module_Generator, .Module_ResourceConverter {
         +Module_Thermal {
             +Data_Thermal {}
         }
     }
+// add the PAM header for command pods
     .Module_Command {
         PAMModuleVisualsOverride +: [
             {
@@ -13,5 +16,32 @@
                 ShowFooter: true
             }
         ];
+    }
+}
+
+// add EC consumption to all command pods
+:parts #pod_1v_conical_crew > Module_Command > Data_Command {
+    requiredResources +: [
+        {
+            Rate: 20,
+            ResourceName: "ElectricCharge",
+            AcceptanceThreshold: 1.0
+        }
+    ];
+}
+
+:parts #pod_1v_conical_crew, #pod_1v_lander_crew {
+    +Module_Thermal {
+        +Data_Thermal {
+            FluxGenerated: 10;
+        }
+    }
+}
+
+:parts #pod_2v_lander_crew, #pod_2v_conical_crew, #pod_2v_cupola_crew {
+    +Module_Thermal {
+        +Data_Thermal {
+            FluxGenerated: 20;
+        }
     }
 }
