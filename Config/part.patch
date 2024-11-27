@@ -27,7 +27,7 @@
         * > Module_Command > Data_Command {
             requiredResources +: [
                 {
-                    Rate: 10 * $crewCapacity,
+                    Rate: $crewCapacity,
                     ResourceName: "ElectricCharge",
                     AcceptanceThreshold: 1.0
                 }
@@ -35,7 +35,7 @@
         }
     }
 }
-
+/*
 :parts #pod_1v_conical_crew, #pod_1v_lander_crew {
     +Module_Thermal {
         +Data_Thermal {
@@ -48,6 +48,26 @@
     +Module_Thermal {
         +Data_Thermal {
             FluxGenerated: 20;
+        }
+    }
+}*/
+
+@function get-ec-rate($resource-list, $part-name: "none") {
+  @each $resource in $resource-list {
+    @if $resource[ResourceName] == ElectricCharge {
+      @return $resource[Rate];
+    }
+  }
+  $log: debug-log("No ec rate found in the resource list for #{$part-name}");
+  @return 0;
+}
+
+:parts .Module_Command:[
+  $rate: get-ec-rate($$requiredResources, "Module_Command");
+] {
+    +Module_Thermal {
+        +Data_Thermal {
+            FluxGenerated: 10 * $rate;
         }
     }
 }
