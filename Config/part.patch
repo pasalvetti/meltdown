@@ -1,4 +1,5 @@
 @use "builtin:debug";
+
 :parts {
 // add Module_Thermal to all generators and resource converters
     .Module_Generator, .Module_ResourceConverter {
@@ -19,15 +20,20 @@
     }
 }
 
-// add EC consumption to all command pods
-:parts #pod_1v_conical_crew > Module_Command > Data_Command {
-    requiredResources +: [
-        {
-            Rate: 20,
-            ResourceName: "ElectricCharge",
-            AcceptanceThreshold: 1.0
+// add EC consumption to all crewed command pods based on their crew capacity
+:parts {
+    @if $$crewCapacity > 0 {
+        $crewCapacity: $$crewCapacity;
+        * > Module_Command > Data_Command {
+            requiredResources +: [
+                {
+                    Rate: 10 * $crewCapacity,
+                    ResourceName: "ElectricCharge",
+                    AcceptanceThreshold: 1.0
+                }
+            ];
         }
-    ];
+    }
 }
 
 :parts #pod_1v_conical_crew, #pod_1v_lander_crew {
