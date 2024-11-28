@@ -19,17 +19,20 @@ namespace Meltdown
          * Sets the 'isHeating' flag, used to mark the part as heating or not when calculating the radiators' influence.
          * Also sets the flux (in kW). If no flux is to be set, use usePatchedFlux=false (only to be used if the stock game already generates the flux).
          **/
-        private static void SetThermalFluxData(PartComponentModule __instance, bool isHeating, bool usePatchedFlux)
+        private static double GenerateFlux(PartComponentModule __instance, bool isHeating, bool usePatchedFlux)
         {
-            if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent))
+            if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent) && thermalComponent._dataThermal != null)
             {
-                if (thermalComponent._dataThermal == null) return;
                 thermalComponent._dataThermal.isHeating = isHeating;
                 if (usePatchedFlux)
                 {
                     thermalComponent.SetFlux();
                 }
+                //System.Diagnostics.Debug.Write("[Meltdown] GenerateFlux: FluxGenerated=" + thermalComponent._dataThermal.FluxGenerated);
+                return thermalComponent._dataThermal.FluxGenerated;
             }
+            System.Diagnostics.Debug.Write("[Meltdown] GenerateFlux: unable to find Thermal Componant for " + __instance.Part.PartName + "/" + __instance.Part.GlobalId);
+            return 0.0;
         }
 
 
@@ -46,7 +49,6 @@ namespace Meltdown
         /** Module_Generator **/
 
         /**
-         * Enable heat generation for generators.
          * Prefix so that the field gets displayed in SetPAMVisibility().
          **/
         [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.OnInitialize))]
@@ -54,17 +56,18 @@ namespace Meltdown
         static public void OnInitializePreFix(Module_Generator __instance) // tourne
         {
             __instance.dataGenerator.AutoShutdown = true; // utile ?
-            __instance.dataGenerator.FluxGenerated = 300;
+            //__instance.dataGenerator.FluxGenerated = 300;
         }
 
         /**
-         * Marks the generator as a heat-generating part.
+         * Marks the generator as a heat-generating part and enable heat generation for generators.
          **/
         [HarmonyPatch(typeof(PartComponentModule_Generator), nameof(PartComponentModule_Generator.OnUpdate))]
-        [HarmonyPostfix]
-        public static void OnUpdatePostFix(double universalTime, PartComponentModule_Generator __instance)
+        [HarmonyPrefix]
+        public static void OnUpdatePreFix(double universalTime, PartComponentModule_Generator __instance)
         {
-            SetThermalFluxData(__instance, true, false); // a generator is always heating. The flux is 0.0 because it's already set in the stock module.
+            double fluxGenerated = GenerateFlux(__instance, true, false); // a generator is always heating.
+            __instance.dataGenerator.FluxGenerated = fluxGenerated;
         }
         
     
@@ -103,7 +106,7 @@ namespace Meltdown
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
             /* Marks as heating if the converter is on and has a rate > 0. The flux is 0.0 because it's already set in the stock module. */
-            SetThermalFluxData(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, false);
+            GenerateFlux(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, false);
 
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
         }
@@ -349,7 +352,7 @@ namespace Meltdown
         [HarmonyPostfix]
         public static void OnUpdatePostFix(PartComponentModule_Command __instance)
         {
-            SetThermalFluxData(__instance, true, true); // a command pod is always heating
+            GenerateFlux(__instance, true, true); // a command pod is always heating
         }
 
 

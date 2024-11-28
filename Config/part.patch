@@ -1,8 +1,30 @@
 @use "builtin:debug";
 
+/** Get the electric charge rate from a list **/
+@function get-ec-rate($resource-list, $part-name: "none") {
+  @each $resource in $resource-list {
+    @if $resource[ResourceName] == ElectricCharge {
+      @return $resource[Rate];
+    }
+  }
+  $log: debug-log("No ec rate found in the resource list for #{$part-name}");
+  @return 0;
+}
+
 :parts {
-// add Module_Thermal to all generators and resource converters
-    .Module_Generator, .Module_ResourceConverter {
+// add Module_Thermal to all generators
+    .Module_Generator:[
+        $rate: $$ResourceSetting[Rate];
+    ] {
+        +Module_Thermal {
+            +Data_Thermal {
+                $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
+                FluxGenerated: 10 * $rate;
+            }
+        }
+    }
+// add Module_Thermal to all resource converters
+    .Module_ResourceConverter {
         +Module_Thermal {
             +Data_Thermal {}
         }
@@ -36,17 +58,7 @@
     }
 }
 
-// all command pods generate heat based on their EC consumption
-@function get-ec-rate($resource-list, $part-name: "none") {
-  @each $resource in $resource-list {
-    @if $resource[ResourceName] == ElectricCharge {
-      @return $resource[Rate];
-    }
-  }
-  $log: debug-log("No ec rate found in the resource list for #{$part-name}");
-  @return 0;
-}
-
+// all command pods generate heat based on their EC consumption + add Module_Thermal to all command
 :parts .Module_Command:[
   $rate: get-ec-rate($$requiredResources, "Module_Command");
 ] {
