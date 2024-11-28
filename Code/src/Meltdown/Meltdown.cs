@@ -24,9 +24,6 @@ public class Meltdown : BaseSpaceWarpPlugin
 
         // Register all Harmony patches in the project
         Harmony.CreateAndPatchAll(typeof(MeltdownPlugin));
-
-        // Log the config value into <KSP2 Root>/BepInEx/LogOutput.log
-        Logger.LogInfo("Meltdown is alive.");
     }
 }
 
