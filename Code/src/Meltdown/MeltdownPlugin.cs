@@ -9,6 +9,7 @@ using Meltdown.Modules;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
 using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
+using static KSP.Modules.Data_Deployable;
 
 namespace Meltdown
 {
@@ -19,17 +20,17 @@ namespace Meltdown
          * Sets the 'isHeating' flag, used to mark the part as heating or not when calculating the radiators' influence.
          * Also sets the flux (in kW). If no flux is to be set, use usePatchedFlux=false (only to be used if the stock game already generates the flux).
          **/
-        private static double GenerateFlux(PartComponentModule __instance, bool isHeating, bool usePatchedFlux)
+        private static double GenerateFlux(PartComponentModule __instance, bool isHeating, double rate, bool usePatchedFlux)
         {
             if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent) && thermalComponent._dataThermal != null)
             {
                 thermalComponent._dataThermal.isHeating = isHeating;
                 if (usePatchedFlux)
                 {
-                    thermalComponent.SetFlux();
+                    thermalComponent.SetFlux(rate);
                 }
                 //System.Diagnostics.Debug.Write("[Meltdown] GenerateFlux: FluxGenerated=" + thermalComponent._dataThermal.FluxGenerated);
-                return thermalComponent._dataThermal.FluxGenerated;
+                return thermalComponent._dataThermal.FluxGenerated * rate;
             }
             System.Diagnostics.Debug.Write("[Meltdown] GenerateFlux: unable to find Thermal Componant for " + __instance.Part.PartName + "/" + __instance.Part.GlobalId);
             return 0.0;
@@ -66,7 +67,7 @@ namespace Meltdown
         [HarmonyPrefix]
         public static void OnUpdatePreFix(double universalTime, PartComponentModule_Generator __instance)
         {
-            double fluxGenerated = GenerateFlux(__instance, true, false); // a generator is always heating.
+            double fluxGenerated = GenerateFlux(__instance, true, 1.0, false); // a generator is always heating.
             __instance.dataGenerator.FluxGenerated = fluxGenerated;
         }
         
@@ -106,7 +107,7 @@ namespace Meltdown
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
             /* Marks as heating if the converter is on and has a rate > 0. The flux is 0.0 because it's already set in the stock module. */
-            double fluxGenerated = GenerateFlux(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, false);
+            double fluxGenerated = GenerateFlux(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, 1.0, false);
             __instance._dataResourceConverter.FluxGenerated = fluxGenerated;
 
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
@@ -353,7 +354,33 @@ namespace Meltdown
         [HarmonyPostfix]
         public static void OnUpdatePostFix(PartComponentModule_Command __instance)
         {
-            GenerateFlux(__instance, true, true); // a command pod is always heating
+            GenerateFlux(__instance, true, 1.0, true); // a command pod is always heating
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        /** Solar Panel **/
+
+        [HarmonyPatch(typeof(PartComponentModule_SolarPanel), nameof(PartComponentModule_SolarPanel.OnUpdate))]
+        [HarmonyPostfix]
+        public static void OnUpdatePostFix(PartComponentModule_SolarPanel __instance)
+        {
+            Data_Deployable.DeployState deployState = __instance.dataDeployable.CurrentDeployState.GetValue();
+            bool IsActive = (!__instance.dataDeployable.extendable || deployState == Data_Deployable.DeployState.Extended || deployState == Data_Deployable.DeployState.Extending);
+            double rate = __instance.dataSolarPanel.EnergyFlow.GetValue() / __instance.dataSolarPanel.ResourceSettings.Rate;
+            System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: EnergyFlow=" + __instance.dataSolarPanel.EnergyFlow.GetValue());
+            System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: ResourceSettings.Rate=" + __instance.dataSolarPanel.ResourceSettings.Rate);
+            System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: rate=" + rate);
+            GenerateFlux(__instance, true, rate, true);
         }
 
 
