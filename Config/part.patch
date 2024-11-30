@@ -44,7 +44,7 @@
     }
 // add Module_Thermal to all solar panels
     .Module_SolarPanel:[
-        $rate: $$ResourceSetting[Rate];
+        $rate: $$ResourceSettings[Rate];
     ] {
         @if ($rate > 0) {
             +Module_Thermal {
