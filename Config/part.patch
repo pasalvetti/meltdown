@@ -2,22 +2,22 @@
 
 /** Get the electric charge rate from a list **/
 @function get-ec-rate($resource-list, $part-name: "none") {
-  @each $resource in $resource-list {
-    @if $resource[ResourceName] == ElectricCharge {
-      @return $resource[Rate];
+    @each $resource in $resource-list {
+        @if $resource[ResourceName] == ElectricCharge {
+            @return $resource[Rate];
+        }
     }
-  }
-  $log: debug-log("No ec rate found in the resource list for #{$part-name}");
-  @return 0;
+    $log: debug-log("No ec rate found in the resource list for #{$part-name}");
+    @return 0;
 }
 
 :parts {
-// add Module_Thermal to all generators
+// add Module_Thermal to all generators generating electric charge
     .Module_Generator:[
         $rate: $$ResourceSetting[Rate];
         $ResourceName: $$ResourceSetting[ResourceName];
     ] {
-        @if ($rate > 0 and $ResourceName=="ElectricCharge") {
+        @if ($rate > 0 and $ResourceName == ElectricCharge) {
             +Module_Thermal {
                 +Data_Thermal {
                     $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
@@ -26,13 +26,23 @@
             }
         }
     }
-// add Module_Thermal to all resource converters
-    .Module_ResourceConverter {
-        +Module_Thermal {
-            +Data_Thermal {}
+// add Module_Thermal to all resource converters generating electric charge
+    .Module_ResourceConverter:[
+        $rate: 0;
+        @each $definition in $$FormulaDefinitions {
+            $rate+: get-ec-rate($definition[OutputResources], "Module_ResourceConverter");
+        }
+    ] {
+        @if ($rate > 0) {
+            +Module_Thermal {
+                +Data_Thermal {
+                    $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
+                    FluxGenerated: 10 * $rate;
+                }
+            }
         }
     }
-// add the PAM header for command pods
+// add the PAM header
     .Module_Command {
         PAMModuleVisualsOverride +: [
             {
@@ -52,7 +62,7 @@
         * > Module_Command > Data_Command {
             requiredResources +: [
                 {
-                    Rate: $crewCapacity,
+                    Rate: 0.5 * $crewCapacity,
                     ResourceName: "ElectricCharge",
                     AcceptanceThreshold: 1.0
                 }

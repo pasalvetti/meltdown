@@ -81,7 +81,7 @@ namespace Meltdown
         [HarmonyPostfix]
         static public void OnInitializePostFix(Module_ResourceConverter __instance)
         {
-            __instance._dataResourceConverter.FluxGenerated = 300; // this is what enables heat generation for resource converters
+            //__instance._dataResourceConverter.FluxGenerated = 300; // this is what enables heat generation for resource converters
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.OnInitialize: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass);
         }
 
@@ -106,7 +106,8 @@ namespace Meltdown
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
             /* Marks as heating if the converter is on and has a rate > 0. The flux is 0.0 because it's already set in the stock module. */
-            GenerateFlux(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, false);
+            double fluxGenerated = GenerateFlux(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, false);
+            __instance._dataResourceConverter.FluxGenerated = fluxGenerated;
 
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
         }
