@@ -20,7 +20,7 @@
         @if ($rate > 0 and $ResourceName == ElectricCharge) {
             +Module_Thermal {
                 +Data_Thermal {
-                    $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
+                    //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
                     FluxGenerated: 10 * $rate;
                 }
             }
@@ -36,22 +36,11 @@
         @if ($rate > 0) {
             +Module_Thermal {
                 +Data_Thermal {
-                    $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
+                    //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
                     FluxGenerated: 10 * $rate;
                 }
             }
         }
-    }
-// add the PAM header
-    .Module_Command {
-        PAMModuleVisualsOverride +: [
-            {
-                PartComponentModuleName: "PartComponentModule_Thermal",
-                ModuleDisplayName: "PartModules/Thermal/Name",
-                ShowHeader: true,
-                ShowFooter: true
-            }
-        ];
     }
 }
 
@@ -80,4 +69,16 @@
             FluxGenerated: 10 * $rate;
         }
     }
+}
+
+// add the PAM header for all thermal modules
+:parts .Module_Thermal {
+    PAMModuleVisualsOverride +: [
+        {
+            PartComponentModuleName: "PartComponentModule_Thermal",
+            ModuleDisplayName: "PartModules/Thermal/Name",
+            ShowHeader: true,
+            ShowFooter: true
+        }
+    ];
 }
