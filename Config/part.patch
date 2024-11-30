@@ -15,11 +15,14 @@
 // add Module_Thermal to all generators
     .Module_Generator:[
         $rate: $$ResourceSetting[Rate];
+        $ResourceName: $$ResourceSetting[ResourceName];
     ] {
-        +Module_Thermal {
-            +Data_Thermal {
-                $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
-                FluxGenerated: 10 * $rate;
+        @if ($rate > 0 and $ResourceName=="ElectricCharge") {
+            +Module_Thermal {
+                +Data_Thermal {
+                    $log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
+                    FluxGenerated: 10 * $rate;
+                }
             }
         }
     }
