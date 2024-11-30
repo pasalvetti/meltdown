@@ -48,11 +48,11 @@ namespace Meltdown.Modules
                 GlobalLog.Error((object)("[Meltdown] Unable to find the part to heat."));
                 return;
             }
-            if (!_dataThermal.isHeating)
-            {
-                GlobalLog.Error((object)"[Meltdown] You're trying to set up a heating flux to a part not cleared for heating. Please set 'isHeating' to true first.");
-                return;
-            }
+            //if (!_dataThermal.isHeating)
+            //{
+            //    GlobalLog.Error((object)"[Meltdown] " + Part.PartName + " You're trying to set up a heating flux to a part not cleared for heating. Please set 'isHeating' to true first.");
+            //    return;
+            //}
             Part.ThermalData.OtherFlux = _dataThermal.FluxGenerated * rate;
             _dataThermal.HeatGeneratedTxt.SetValue(_dataThermal.FluxGenerated * rate);
         }

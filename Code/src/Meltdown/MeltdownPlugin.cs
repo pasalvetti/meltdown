@@ -22,6 +22,8 @@ namespace Meltdown
          **/
         private static double GenerateFlux(PartComponentModule __instance, bool isHeating, double rate, bool usePatchedFlux)
         {
+            if (rate == 0.0) isHeating = false;
+            if (isHeating == false) rate = 0.0;
             if (__instance.Part.TryGetModule<PartComponentModule_Thermal>(out PartComponentModule_Thermal thermalComponent) && thermalComponent._dataThermal != null)
             {
                 thermalComponent._dataThermal.isHeating = isHeating;
@@ -376,11 +378,11 @@ namespace Meltdown
         {
             Data_Deployable.DeployState deployState = __instance.dataDeployable.CurrentDeployState.GetValue();
             bool IsActive = (!__instance.dataDeployable.extendable || deployState == Data_Deployable.DeployState.Extended || deployState == Data_Deployable.DeployState.Extending);
-            double rate = __instance.dataSolarPanel.EnergyFlow.GetValue() / __instance.dataSolarPanel.ResourceSettings.Rate;
-            System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: EnergyFlow=" + __instance.dataSolarPanel.EnergyFlow.GetValue());
-            System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: ResourceSettings.Rate=" + __instance.dataSolarPanel.ResourceSettings.Rate);
-            System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: rate=" + rate);
-            GenerateFlux(__instance, true, rate, true);
+            double rate = IsActive?__instance.dataSolarPanel.EnergyFlow.GetValue() / __instance.dataSolarPanel.ResourceSettings.Rate:0.0;
+            //System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: EnergyFlow=" + __instance.dataSolarPanel.EnergyFlow.GetValue());
+            //System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: ResourceSettings.Rate=" + __instance.dataSolarPanel.ResourceSettings.Rate);
+            //System.Diagnostics.Debug.Write("PartComponentModule_SolarPanel.OnUpdatePostFix: rate=" + rate);
+            GenerateFlux(__instance, IsActive && rate > 0.0, rate, true);
         }
 
 
