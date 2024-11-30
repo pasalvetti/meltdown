@@ -27,7 +27,7 @@ namespace Meltdown.Modules
 
         public override void OnUpdate(double universalTime, double deltaUniversalTime)
         {
-            _dataThermal.TemperatureTxt.SetValue(Units.PrintSI(Part.Temperature, "K", 3));
+            _dataThermal.TemperatureTxt.SetValue(Units.PrintSI(Part.Temperature, "K", 3) + " / " + Units.PrintSI(Part.MaxTemp, "K", 3));
 
             _dataThermal.EnvironmentFluxTxt.SetValue(Units.PrintSI(Part.ThermalData.EnvironmentFlux * 1000.0, "W", 3));
             _dataThermal.SolarFluxTxt.SetValue(Units.PrintSI(Part.ThermalData.SolarFlux * 1000.0, "W", 3));
