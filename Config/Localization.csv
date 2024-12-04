@@ -10,3 +10,8 @@ PartModules/Thermal/OtherFlux,Text,,[Debug] Internal
 PartModules/Thermal/CoolingEnergyToApply,Text,,[Debug] Cooling
 
 PartModules/Thermal/Name,Text,,Thermal
+
+Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15
+Parts/Subtitle/meltdown_radiator_1v_panel,Text,,Small Radiator Panel
+Parts/Manufacturer/meltdown_radiator_1v_panel,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_1v_panel,Text,,"xxx"

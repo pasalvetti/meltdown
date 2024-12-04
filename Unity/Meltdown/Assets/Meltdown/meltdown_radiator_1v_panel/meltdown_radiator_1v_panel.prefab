@@ -304,7 +304,7 @@ MonoBehaviour:
       attachNodes:
       - nodeID: srfAttach
         NodeSymmetryGroupID: 
-        nodeType: 0
+        nodeType: 1
         attachMethod: 0
         IsMultiJoint: 0
         MultiJointMaxJoint: 0

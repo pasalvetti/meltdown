@@ -67,7 +67,7 @@
       {
         "nodeID": "srfAttach",
         "NodeSymmetryGroupID": "",
-        "nodeType": "Stack",
+        "nodeType": "Surface",
         "attachMethod": "FIXED_JOINT",
         "IsMultiJoint": false,
         "MultiJointMaxJoint": 0,
