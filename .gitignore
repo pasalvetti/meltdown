@@ -13,3 +13,6 @@ Code/scripts
 /Unity/Meltdown/Library
 /Unity/Meltdown/Assets/ThunderKitSettings
 Unity/Meltdown/Assets/ThunderKitSettings.meta
+/Unity/Meltdown/Assets/AddressableAssetsData
+*.meta
+/Unity/Meltdown/Assets/KSP2UTData
