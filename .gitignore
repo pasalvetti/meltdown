@@ -5,3 +5,11 @@ Code/dist
 Code/plugin_template/.vs
 Code/scripts
 *.blend1
+/Unity/Meltdown/UserSettings
+/Unity/Meltdown/Temp
+/Unity/Meltdown/ProjectSettings
+/Unity/Meltdown/Packages
+/Unity/Meltdown/Logs
+/Unity/Meltdown/Library
+/Unity/Meltdown/Assets/ThunderKitSettings
+Unity/Meltdown/Assets/ThunderKitSettings.meta
