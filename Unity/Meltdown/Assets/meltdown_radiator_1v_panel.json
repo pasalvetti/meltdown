@@ -51,7 +51,7 @@
     "explosionPotential": 0.5,
     "fuelCrossFeed": true,
     "heatConductivity": 0.12,
-    "mass": 1.0,
+    "mass": 0.04,
     "maxTemp": 2000.0,
     "attachRules": {
       "stack": false,
