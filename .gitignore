@@ -16,3 +16,6 @@ Unity/Meltdown/Assets/ThunderKitSettings.meta
 /Unity/Meltdown/Assets/AddressableAssetsData
 *.meta
 /Unity/Meltdown/Assets/KSP2UTData
+Code/.editorconfig
+Code/Meltdown.sln
+Unity/Meltdown/Assets/Meltdown.unity
