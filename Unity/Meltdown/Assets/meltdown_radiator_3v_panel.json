@@ -1,0 +1,220 @@
+{
+  "version": 0.3,
+  "useExternal": false,
+  "data": {
+    "partName": "meltdown_radiator_3v_panel",
+    "author": "Polo",
+    "category": "Thermal",
+    "family": "0460-Radiator",
+    "childStageOffset": 0,
+    "cost": 100,
+    "crewCapacity": 0,
+    "stageOffset": 0,
+    "isCompound": false,
+    "sizeCategory": "L",
+    "stageType": "None",
+    "resourceCosts": [],
+    "tags": "",
+    "stagingIconAssetAddress": "",
+    "PartSizeDiameter": 0.0,
+    "angularDrag": 1.0,
+    "breakingForce": 200.0,
+    "breakingTorque": 200.0,
+    "buoyancy": 1.0,
+    "buoyancyUseSine": true,
+    "coLiftOffset": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "coMassOffset": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "coPressureOffset": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "coBuoyancy": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "coDisplacement": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "crashTolerance": 10.0,
+    "explosionPotential": 0.5,
+    "fuelCrossFeed": true,
+    "heatConductivity": 0.12,
+    "mass": 1.0,
+    "maxTemp": 2000.0,
+    "attachRules": {
+      "stack": true,
+      "srfAttach": true,
+      "allowStack": true,
+      "allowSrfAttach": true,
+      "allowCollision": true,
+      "allowDock": false,
+      "allowRotate": true,
+      "allowRoot": true
+    },
+    "attachNodes": [
+      {
+        "nodeID": "sfrAttach",
+        "NodeSymmetryGroupID": "",
+        "nodeType": "Surface",
+        "attachMethod": "FIXED_JOINT",
+        "IsMultiJoint": false,
+        "MultiJointMaxJoint": 0,
+        "MultiJointRadiusOffset": 0.0,
+        "MultiJointOnSingleAxis": false,
+        "SingleJointAxis": "X",
+        "MultiJointFullBreakStrength": false,
+        "position": {
+          "x": 0.4,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "orientation": {
+          "x": 1.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "size": 1,
+        "visualSize": 1.0,
+        "isResourceCrossfeed": true,
+        "isRigid": true,
+        "angularStrengthMultiplier": 0.0,
+        "contactArea": 0.0,
+        "overrideDragArea": 0.0,
+        "isCompoundJoint": false
+      }
+    ],
+    "resourceContainers": [],
+    "AllowKinematicPhysicsIfIntersectTerrain": false,
+    "serializedPartModules": [
+      {
+        "Name": "PartComponentModule_ActiveRadiator",
+        "ComponentType": "KSP.Sim.impl.PartComponentModule_ActiveRadiator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "BehaviourType": "KSP.Modules.Module_ActiveRadiator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "ModuleData": [
+          {
+            "Name": "Data_Cooler",
+            "ModuleType": "KSP.Modules.Module_Cooler, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "DataType": "KSP.Modules.Data_Cooler, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Data": null,
+            "DataObject": {
+              "$type": "KSP.Modules.Data_Cooler, Assembly-CSharp",
+              "currentCoolerState": "OFF",
+              "coolerEnabled": {
+                "ContextKey": "coolerEnabled",
+                "storedValue": false
+              },
+              "coolerStatusText": {
+                "ContextKey": "coolerStatusText",
+                "storedValue": "Powered Off"
+              },
+              "isTransformInContact": false,
+              "hasEnoughResources": true,
+              "resourceDiplayNames": [],
+              "fluxRemoved": 200.0,
+              "emissiveLerpRateUp": 0.1,
+              "emissiveLerpRateDown": 0.01,
+              "emissiveMaterialNames": [
+                "meltdown_radiator_3v_panel"
+              ],
+              "fxGroupName": "cooler",
+              "fxPrefab": "fx_gasburst_01",
+              "requiredResources": [
+                {
+                  "Rate": 2.0,
+                  "ResourceName": "ElectricCharge",
+                  "AcceptanceThreshold": 0.0
+                }
+              ],
+              "InputResourcesIDs": [],
+              "RequestConfigs": [],
+              "ModuleType": "KSP.Modules.Module_Cooler, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+              "DataType": "KSP.Modules.Data_Cooler, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+              "IsActiveInStagingProp": {
+                "ContextKey": null,
+                "storedValue": false
+              }
+            }
+          },
+          {
+            "Name": "Data_ActiveRadiator",
+            "ModuleType": "KSP.Modules.Module_ActiveRadiator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "DataType": "KSP.Modules.Data_ActiveRadiator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+            "Data": null,
+            "DataObject": {
+              "$type": "KSP.Modules.Data_ActiveRadiator, Assembly-CSharp",
+              "RadiatorDirection": "X",
+              "ProceduralRadiatorFluxPerAreaUnit": 0.0,
+              "ModuleType": "KSP.Modules.Module_ActiveRadiator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+              "DataType": "KSP.Modules.Data_ActiveRadiator, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+              "IsActiveInStagingProp": {
+                "ContextKey": null,
+                "storedValue": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "resourceSummary": {
+      "Consumes": [],
+      "Generates": [],
+      "Contains": []
+    },
+    "PAMModuleSortOverride": [],
+    "PAMModuleVisualsOverride": [],
+    "collisionVolumeBoundsScale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "emissiveConstant": 0.0,
+    "maximumDrag": 0.2,
+    "minimumDrag": 0.1,
+    "physicsMode": "Full",
+    "inverseStageCarryover": true,
+    "skinMassPerArea": 4.0,
+    "bodyLiftOnlyUnattachedLift": false,
+    "bodyLiftOnlyAttachName": "",
+    "maxLength": -1,
+    "radiatorHeadroom": 0.75,
+    "radiatorMax": 0.35,
+    "skinMaxTemp": 800.0,
+    "skinInternalConductionMult": 1.0,
+    "thermalMassModifier": 1.0,
+    "buoyancyUseCubeNamed": "",
+    "HasReportStorage": false,
+    "oabEditorCategory": "ALL",
+    "partType": "Rocket",
+    "PreferredOrientation": "NONE",
+    "MirrorTechnique": "Auto",
+    "CanSuggestOrientation": false,
+    "PickUpPointOffset": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "PickupRotationPointOffset": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Title": "meltdown_radiator_3v_panel",
+    "Subtitle": null,
+    "Manufacturer": null,
+    "Description": null
+  },
+  "modules": null,
+  "legacyModules": ""
+}
