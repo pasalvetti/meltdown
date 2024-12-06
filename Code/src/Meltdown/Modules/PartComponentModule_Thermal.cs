@@ -1,9 +1,7 @@
 ﻿using KSP;
 using KSP.Game;
-using KSP.Iteration.UI.Binding;
 using KSP.Logging;
 using KSP.Sim.impl;
-using static KSP.Api.UIDataPropertyStrings.View.Vessel.Stages;
 
 namespace Meltdown.Modules
 {

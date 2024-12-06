@@ -1,6 +1,4 @@
-﻿using KSP;
-using KSP.Logging;
-using KSP.Modules;
+﻿using KSP.Modules;
 using KSP.Sim.Definitions;
 using UnityEngine;
 
