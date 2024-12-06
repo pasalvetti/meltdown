@@ -11,7 +11,19 @@ PartModules/Thermal/CoolingEnergyToApply,Text,,[Debug] Cooling
 
 PartModules/Thermal/Name,Text,,Thermal
 
+Menu/VAB/thermalMass,Text,,Thermal Mass
+
 Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15
 Parts/Subtitle/meltdown_radiator_1v_panel,Text,,Small Radiator Panel
 Parts/Manufacturer/meltdown_radiator_1v_panel,Text,,Meltdown Inc.
 Parts/Description/meltdown_radiator_1v_panel,Text,,"xxx"
+
+Parts/Title/meltdown_radiator_2v_panel,Text,,RP-50
+Parts/Subtitle/meltdown_radiator_2v_panel,Text,,Medium Radiator Panel
+Parts/Manufacturer/meltdown_radiator_2v_panel,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_2v_panel,Text,,"xxx"
+
+Parts/Title/meltdown_radiator_2v_panel,Text,,RP-200
+Parts/Subtitle/meltdown_radiator_2v_panel,Text,,Big Radiator Panel
+Parts/Manufacturer/meltdown_radiator_2v_panel,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_2v_panel,Text,,"xxx"

@@ -23,6 +23,7 @@ namespace Meltdown.Modules
             {
                 GlobalLog.Error((object)"[Meltdown] Unable to find a valid game with a resource definition database");
             }
+            _dataThermal.ThermalMass = this.Part.ThermalMass;
         }
 
         public override void OnUpdate(double universalTime, double deltaUniversalTime)
