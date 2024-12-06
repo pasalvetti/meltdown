@@ -55,6 +55,18 @@
             }
         }
     }
+// add Module_ActiveRadiator_MeltdownPlugin to all active radiators
+    .Module_ActiveRadiator > .Module_Cooler :[
+        $fluxRemoved: $$fluxRemoved;
+        $log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
+    ] {
+        +Module_ActiveRadiator_MeltdownPlugin {
+            +Data_ActiveRadiator_MeltdownPlugin {
+                $log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
+                FluxRemoved: $fluxRemoved;
+            }
+        }
+    }
 }
 
 // add EC consumption to all crewed command pods based on their crew capacity
