@@ -1,6 +1,7 @@
 ﻿using I2.Loc;
 using KSP;
 using KSP.Api;
+using KSP.Iteration.UI.Binding;
 using KSP.Sim;
 using KSP.Sim.Definitions;
 using Newtonsoft.Json;
@@ -49,19 +50,23 @@ namespace Meltdown.Modules
         [KSPDefinition]
         public double FluxGenerated;
         [KSPDefinition]
-        public double ThermalMass = 0.0;
+        public double ThermalMassModifier = 0.0;
+        [KSPDefinition]
+        public double Mass = 0.0;
 
         private static string GetConversionOutputString(object valueObj) => (string)valueObj;
 
         private static string GetHeatOutputString(object valueObj) => string.Format("{0:F1} {1}", (object)Math.Abs((double)valueObj), (object)Units.SymbolKiloWatt);
 
+        //Is the part heating?
         public bool isHeating = false;
 
+        // The energy removed from the part by radiators
         public double energyRemoved;
 
         public override List<OABPartData.PartInfoModuleEntry> GetPartInfoEntries(Type partBehaviourModuleType, List<OABPartData.PartInfoModuleEntry> delegateList)
         {
-            if (partBehaviourModuleType == this.ModuleType && ThermalMass != 0.0)
+            if (partBehaviourModuleType == this.ModuleType)
                 delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("Menu/VAB/thermalMass", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetResourceStrings)));
             return delegateList;
         }
@@ -69,9 +74,11 @@ namespace Meltdown.Modules
         private List<OABPartData.PartInfoModuleSubEntry> GetResourceStrings(
           OABPartData.OABSituationStats oabSituationStats)
         {
-            List<OABPartData.PartInfoModuleSubEntry> resourceStrings = new List<OABPartData.PartInfoModuleSubEntry>();
-            //for (int index = 0; index < this.requiredResources.Count; ++index)
-                resourceStrings.Add(new OABPartData.PartInfoModuleSubEntry(LocalizationManager.GetTranslation("VAB/Fuel/ElectricCharge", true, 0, true, false, (GameObject)null, (string)null, true), ThermalMass.ToString() + " J/K"));
+            double thermalMass = Math.Round(ThermalMassModifier * PhysicsSettings.StandardSpecificHeatCapacity * Mass);
+            List<OABPartData.PartInfoModuleSubEntry> resourceStrings =
+            [
+                new OABPartData.PartInfoModuleSubEntry(null, thermalMass + " J/K"),
+            ];
             return resourceStrings;
         }
 

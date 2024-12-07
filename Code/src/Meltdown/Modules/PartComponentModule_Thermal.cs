@@ -21,7 +21,6 @@ namespace Meltdown.Modules
             {
                 GlobalLog.Error((object)"[Meltdown] Unable to find a valid game with a resource definition database");
             }
-            _dataThermal.ThermalMass = this.Part.ThermalMass;
         }
 
         public override void OnUpdate(double universalTime, double deltaUniversalTime)
@@ -35,6 +34,9 @@ namespace Meltdown.Modules
             _dataThermal.otherFluxTxt.SetValue(Units.PrintSI(Part.ThermalData.OtherFlux * 1000.0, "W", 3));
             
             _dataThermal.CoolingEnergyToApplyTxt.SetValue(Units.PrintSI(_dataThermal.energyRemoved * -1000.0, "W", 3)); // radiators
+
+            //if (Part != null)
+              //  _dataThermal.ThermalMass = Part.ThermalMass;
         }
 
         /**

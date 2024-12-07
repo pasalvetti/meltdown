@@ -13,6 +13,9 @@
 
 :parts {
 // add Module_Thermal to all generators generating electric charge
+    $thermalMassModifier: $$thermalMassModifier;
+    $mass: $$mass;
+    //$log: debug-log("Meltdown mass=#{$mass}");
     .Module_Generator:[
         $rate: $$ResourceSetting[Rate];
         $ResourceName: $$ResourceSetting[ResourceName];
@@ -22,6 +25,9 @@
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
                     FluxGenerated: 10 * $rate;
+                    ThermalMassModifier: $thermalMassModifier;
+                    Mass: $mass;
+                    //$log: debug-log("Meltdown mass=#{$mass}");
                 }
             }
         }
@@ -38,6 +44,9 @@
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
                     FluxGenerated: 10 * $rate;
+                    ThermalMassModifier: $thermalMassModifier;
+                    Mass: $mass;
+                    //$log: debug-log("Meltdown mass=#{$mass}");
                 }
             }
         }
@@ -51,6 +60,9 @@
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
                     FluxGenerated: 10 * $rate;
+                    ThermalMassModifier: $thermalMassModifier;
+                    Mass: $mass;
+                    //$log: debug-log("Meltdown mass=#{$mass}");
                 }
             }
         }
@@ -58,12 +70,12 @@
 // add Module_ActiveRadiator_MeltdownPlugin to all active radiators
     .Module_ActiveRadiator :[
         $fluxRemoved: $$fluxRemoved;
-        $log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
+        //$log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
         $requiredResources: $$requiredResources;
     ] {
         +Module_ActiveRadiator_MeltdownPlugin {
             +Data_ActiveRadiator_MeltdownPlugin {
-                $log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
+                //$log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
                 FluxRemoved: $fluxRemoved;
                 RequiredResources: $requiredResources;
             }
@@ -88,12 +100,19 @@
 }
 
 // all command pods generate heat based on their EC consumption + add Module_Thermal to all command
-:parts .Module_Command:[
-  $rate: get-ec-rate($$requiredResources, "Module_Command");
-] {
-    +Module_Thermal {
-        +Data_Thermal {
-            FluxGenerated: 10 * $rate;
+:parts {
+    $thermalMassModifier: $$thermalMassModifier;
+    $mass: $$mass;
+    .Module_Command:[
+        $rate: get-ec-rate($$requiredResources, "Module_Command");
+    ] {
+        +Module_Thermal {
+            +Data_Thermal {
+                FluxGenerated: 10 * $rate;
+                ThermalMassModifier: $thermalMassModifier;
+                Mass: $mass;
+                //$log: debug-log("Meltdown mass=#{$mass}");
+            }
         }
     }
 }
