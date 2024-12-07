@@ -8,7 +8,7 @@ namespace Meltdown.Modules
         [SerializeField]
         protected Data_ActiveRadiator_MeltdownPlugin _dataActiveRadiator;
 
-        public override Type PartComponentModuleType => typeof(PartComponentModule_Thermal);
+        public override Type PartComponentModuleType => typeof(PartComponentModule_ActiveRadiator_MeltdownPlugin);
 
         public override void AddDataModules()
         {

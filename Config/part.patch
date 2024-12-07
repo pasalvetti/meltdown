@@ -56,14 +56,16 @@
         }
     }
 // add Module_ActiveRadiator_MeltdownPlugin to all active radiators
-    .Module_ActiveRadiator > .Module_Cooler :[
+    .Module_ActiveRadiator :[
         $fluxRemoved: $$fluxRemoved;
         $log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
+        $requiredResources: $$requiredResources;
     ] {
         +Module_ActiveRadiator_MeltdownPlugin {
             +Data_ActiveRadiator_MeltdownPlugin {
                 $log: debug-log("Meltdown fluxRemoved=#{$fluxRemoved}");
                 FluxRemoved: $fluxRemoved;
+                RequiredResources: $requiredResources;
             }
         }
     }

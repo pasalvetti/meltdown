@@ -8,16 +8,14 @@ namespace Meltdown.Modules
 {
     public class Data_ActiveRadiator_MeltdownPlugin : ModuleData
     {
-        public override Type ModuleType => typeof(Module_Thermal);
+        public override Type ModuleType => typeof(Module_ActiveRadiator_MeltdownPlugin);
 
         [KSPDefinition]
         public List<PartModuleResourceSetting> RequiredResources;
         [KSPDefinition]
         public double FluxRemoved;
 
-        public override List<OABPartData.PartInfoModuleEntry> GetPartInfoEntries(
-          System.Type partBehaviourModuleType,
-          List<OABPartData.PartInfoModuleEntry> delegateList)
+        public override List<OABPartData.PartInfoModuleEntry> GetPartInfoEntries(Type partBehaviourModuleType, List<OABPartData.PartInfoModuleEntry> delegateList)
         {
             if (partBehaviourModuleType == this.ModuleType)
             {
@@ -50,7 +48,7 @@ namespace Meltdown.Modules
         {
             return
             [
-                new OABPartData.PartInfoModuleSubEntry(string.Format(LocalizationManager.GetTranslation("PartModules/Thermal/HeatGenerated", true, 0, true, false, (GameObject) null, (string) null, true), (object) FluxRemoved))
+                new OABPartData.PartInfoModuleSubEntry(FluxRemoved.ToString() + " kW")
             ];
         }
 
