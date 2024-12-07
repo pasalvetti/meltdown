@@ -20,7 +20,7 @@ namespace Meltdown.Modules
             if (partBehaviourModuleType == this.ModuleType)
             {
                 delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("PartModules/Generic/Tooltip/Resources", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetResourceStrings)));
-                delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("PartModules/Thermal/HeatGenerated", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetHeatGeneratedString)));
+                delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("PartModules/Thermal/HeatRemoved", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetHeatRemovedString)));
             }
             return delegateList;
         }
@@ -44,7 +44,7 @@ namespace Meltdown.Modules
         /**
          * Displays the heat generated in the OAB part entries.
          **/
-        private List<OABPartData.PartInfoModuleSubEntry> GetHeatGeneratedString(OABPartData.OABSituationStats oabSituationStats)
+        private List<OABPartData.PartInfoModuleSubEntry> GetHeatRemovedString(OABPartData.OABSituationStats oabSituationStats)
         {
             return
             [

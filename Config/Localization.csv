@@ -1,6 +1,7 @@
 Key,Type,Desc,English
 
 PartModules/Thermal/HeatGenerated,Text,,Heat generated
+PartModules/Thermal/HeatRemoved,Text,,Heat removed
 PartModules/Thermal/Temperature,Text,,Temp.
 PartModules/Thermal/EnvironmentFlux,Text,,[Debug] Environ.
 PartModules/Thermal/SolarFlux,Text,,[Debug] Solar
