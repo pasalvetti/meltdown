@@ -357,7 +357,7 @@ MonoBehaviour:
       radiatorMax: 0.35
       skinMaxTemp: 800
       skinInternalConductionMult: 1
-      thermalMassModifier: 1
+      thermalMassModifier: 3
       buoyancyUseCubeNamed: 
       HasReportStorage: 0
       oabEditorCategory: 2

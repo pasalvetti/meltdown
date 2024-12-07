@@ -52,7 +52,7 @@
     "fuelCrossFeed": true,
     "heatConductivity": 0.12,
     "mass": 0.5,
-    "maxTemp": 2000.0,
+    "maxTemp": 2500.0,
     "attachRules": {
       "stack": false,
       "srfAttach": true,
@@ -192,7 +192,7 @@
     "radiatorMax": 0.35,
     "skinMaxTemp": 800.0,
     "skinInternalConductionMult": 1.0,
-    "thermalMassModifier": 1.0,
+    "thermalMassModifier": 3.0,
     "buoyancyUseCubeNamed": "",
     "HasReportStorage": false,
     "oabEditorCategory": "ALL",

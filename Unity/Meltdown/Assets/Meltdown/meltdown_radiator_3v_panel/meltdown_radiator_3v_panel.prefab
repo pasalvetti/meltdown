@@ -384,7 +384,7 @@ MonoBehaviour:
       fuelCrossFeed: 1
       heatConductivity: 0.12
       mass: 1
-      maxTemp: 2000
+      maxTemp: 2800
       attachRules:
         stack: 1
         srfAttach: 1
@@ -406,7 +406,7 @@ MonoBehaviour:
         SingleJointAxis: 0
         MultiJointFullBreakStrength: 0
         position:
-          x: 0.4
+          x: 0.07
           y: 0
           z: 0
         orientation:
@@ -450,7 +450,7 @@ MonoBehaviour:
       radiatorMax: 0.35
       skinMaxTemp: 800
       skinInternalConductionMult: 1
-      thermalMassModifier: 1
+      thermalMassModifier: 3
       buoyancyUseCubeNamed: 
       HasReportStorage: 0
       oabEditorCategory: 2
