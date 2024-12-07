@@ -1,0 +1,11 @@
+:science #tNode_0v_electronics {
+  UnlockedPartsIDs +: [ "meltdown_radiator_1v_panel" ];
+}
+
+:science #tNode_1v_electronics_01 {
+  UnlockedPartsIDs +: [ "meltdown_radiator_2v_panel" ];
+}
+
+:science #tNode_1v_electronics_04 {
+  UnlockedPartsIDs +: [ "meltdown_radiator_3v_panel" ];
+}
