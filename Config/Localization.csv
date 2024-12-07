@@ -14,17 +14,17 @@ PartModules/Thermal/Name,Text,,Thermal
 
 Menu/VAB/thermalMass,Text,,Thermal Mass
 
-Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15
+Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15 "Hot snail"
 Parts/Subtitle/meltdown_radiator_1v_panel,Text,,Small Radiator Panel
 Parts/Manufacturer/meltdown_radiator_1v_panel,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_1v_panel,Text,,"xxx"
+Parts/Description/meltdown_radiator_1v_panel,Text,,"RP-15 is the unassuming hero of the new space era. It may look slow, but slow and steady wins the race. So next time your satellite's overheating, remember: Hot Snail's got your back, one slow coil at a time."
 
-Parts/Title/meltdown_radiator_2v_panel,Text,,RP-50
+Parts/Title/meltdown_radiator_2v_panel,Text,,RP-50 "Barbecue"
 Parts/Subtitle/meltdown_radiator_2v_panel,Text,,Medium Radiator Panel
 Parts/Manufacturer/meltdown_radiator_2v_panel,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_2v_panel,Text,,"xxx"
+Parts/Description/meltdown_radiator_2v_panel,Text,,"With its winding cooling tube, RP-50 is the ultimate grill master, constantly roasting away the excess heat."
 
-Parts/Title/meltdown_radiator_3v_panel,Text,,RP-200
+Parts/Title/meltdown_radiator_3v_panel,Text,,RP-200 "Toasty Snake"
 Parts/Subtitle/meltdown_radiator_3v_panel,Text,,Big Radiator Panel
 Parts/Manufacturer/meltdown_radiator_3v_panel,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_3v_panel,Text,,"xxx"
+Parts/Description/meltdown_radiator_3v_panel,Text,,"The folks at Meltdown Inc. had a bit of a 'hot mess' on their hands. They tried to Frankenstein two RP-50s together, but it was way too wobbly for anyone's taste. So, they cooked up a bigger, badder radiator to keep their spacecraft frosty. Winter is truly coming this time."
