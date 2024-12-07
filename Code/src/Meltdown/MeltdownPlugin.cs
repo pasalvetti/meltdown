@@ -75,14 +75,6 @@ namespace Meltdown
 
         /** Resource_converter **/
 
-        [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.OnInitialize))]
-        [HarmonyPostfix]
-        static public void OnInitializePostFix(Module_ResourceConverter __instance)
-        {
-            //__instance._dataResourceConverter.FluxGenerated = 300; // this is what enables heat generation for resource converters
-            //System.Diagnostics.Debug.Write("Module_ResourceConverter.OnInitialize: thermalMass=" + __instance.part.Model.ThermalData.ThermalMass);
-        }
-
         [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.OnToggleChangedValue))]
         [HarmonyPostfix]
         public static void OnToggleChangedValuePostFix(Module_ResourceConverter __instance) // fonctionne
@@ -91,20 +83,22 @@ namespace Meltdown
         }
 
         /**
-         * Fixes :
-         * - the flux should be multiplied by the conversion rate
-         * - the flux should not be multiplied by the time
+         * Generates heat.
          **/
         [HarmonyPatch(typeof(Module_ResourceConverter), nameof(Module_ResourceConverter.ThermalUpdate))]
         [HarmonyPostfix]
         public static void ThermalUpdatePostFix(double deltaTime, Module_ResourceConverter __instance)
-        {           
+        {
+            /* Fixes stock errors:
+             * - the flux should be multiplied by the conversion rate
+             * - the flux should not be multiplied by the time */
             if (__instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.FluxGenerated > 0.0)
             {
                 __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
             }
             /* Marks as heating if the converter is on and has a rate > 0. The flux is 0.0 because it's already set in the stock module. */
-            double fluxGenerated = GenerateFlux(__instance._componentModule, __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0, 1.0, false);
+            bool isHeating = __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0;
+            double fluxGenerated = GenerateFlux(__instance._componentModule, isHeating, rate:1.0, usePatchedFlux:false);
             __instance._dataResourceConverter.FluxGenerated = fluxGenerated;
 
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
