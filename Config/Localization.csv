@@ -1,7 +1,7 @@
 Key,Type,Desc,English
 
-PartModules/Thermal/HeatGenerated,Text,,Heat generated
-PartModules/Thermal/HeatRemoved,Text,,Heat removed
+PartModules/Thermal/HeatGenerated,Text,,Heat Generated
+PartModules/Thermal/HeatRemoved,Text,,Heat Removed
 PartModules/Thermal/Temperature,Text,,Temp.
 PartModules/Thermal/EnvironmentFlux,Text,,[Debug] Environ.
 PartModules/Thermal/SolarFlux,Text,,[Debug] Solar
@@ -14,7 +14,7 @@ PartModules/Thermal/Name,Text,,Thermal
 
 Menu/VAB/thermalMass,Text,,Thermal Mass
 
-Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15 "Hot snail"
+Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15 "Hot Snail"
 Parts/Subtitle/meltdown_radiator_1v_panel,Text,,Small Radiator Panel
 Parts/Manufacturer/meltdown_radiator_1v_panel,Text,,Meltdown Inc.
 Parts/Description/meltdown_radiator_1v_panel,Text,,"RP-15 is the unassuming hero of the new space era. It may look slow, but slow and steady wins the race. So next time your satellite's overheating, remember: Hot Snail's got your back, one slow coil at a time."
