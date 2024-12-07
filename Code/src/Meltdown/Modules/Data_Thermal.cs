@@ -67,12 +67,14 @@ namespace Meltdown.Modules
         public override List<OABPartData.PartInfoModuleEntry> GetPartInfoEntries(Type partBehaviourModuleType, List<OABPartData.PartInfoModuleEntry> delegateList)
         {
             if (partBehaviourModuleType == this.ModuleType)
+            {
                 delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("Menu/VAB/thermalMass", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetResourceStrings)));
+                delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("PartModules/Thermal/HeatGenerated", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetHeatGeneratedStrings)));
+            }
             return delegateList;
         }
 
-        private List<OABPartData.PartInfoModuleSubEntry> GetResourceStrings(
-          OABPartData.OABSituationStats oabSituationStats)
+        private List<OABPartData.PartInfoModuleSubEntry> GetResourceStrings(OABPartData.OABSituationStats oabSituationStats)
         {
             double thermalMass = Math.Round(ThermalMassModifier * PhysicsSettings.StandardSpecificHeatCapacity * Mass);
             List<OABPartData.PartInfoModuleSubEntry> resourceStrings =
@@ -80,6 +82,14 @@ namespace Meltdown.Modules
                 new OABPartData.PartInfoModuleSubEntry(null, thermalMass + " J/K"),
             ];
             return resourceStrings;
+        }
+
+        private List<OABPartData.PartInfoModuleSubEntry> GetHeatGeneratedStrings(OABPartData.OABSituationStats oabSituationStats)
+        {
+            return
+            [
+                new OABPartData.PartInfoModuleSubEntry(FluxGenerated + " kW")
+            ];
         }
 
     }
