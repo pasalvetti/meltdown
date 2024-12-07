@@ -15,7 +15,7 @@ namespace Meltdown
          * Sets the 'isHeating' flag, used to mark the part as heating or not when calculating the radiators' influence.
          * Also sets the flux (in kW). If no flux is to be set, use usePatchedFlux=false (only to be used if the stock game already generates the flux).
          **/
-        private static double GenerateFlux(PartComponentModule __instance, bool isHeating, double rate, bool usePatchedFlux)
+        public static double GenerateFlux(PartComponentModule __instance, bool isHeating, double rate, bool usePatchedFlux)
         {
             if (rate == 0.0) isHeating = false;
             if (isHeating == false) rate = 0.0;
@@ -332,12 +332,12 @@ namespace Meltdown
 
         /** Command **/
 
-        [HarmonyPatch(typeof(PartComponentModule_Command), nameof(PartComponentModule_Command.OnUpdate))]
-        [HarmonyPostfix]
-        public static void OnUpdatePostFix(PartComponentModule_Command __instance)
-        {
-            GenerateFlux(__instance, true, 1.0, true); // a command pod is always heating
-        }
+        //[HarmonyPatch(typeof(PartComponentModule_Command), nameof(PartComponentModule_Command.OnUpdate))]
+        //[HarmonyPostfix]
+        //public static void OnUpdatePostFix(PartComponentModule_Command __instance)
+        //{
+        //    GenerateFlux(__instance, true, 1.0, true); // a command pod is always heating
+        //}
 
 
 
