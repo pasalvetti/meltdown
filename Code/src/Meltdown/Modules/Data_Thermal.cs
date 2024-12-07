@@ -68,8 +68,8 @@ namespace Meltdown.Modules
         {
             if (partBehaviourModuleType == this.ModuleType)
             {
-                delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("Menu/VAB/thermalMass", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetResourceStrings)));
                 delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("PartModules/Thermal/HeatGenerated", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetHeatGeneratedStrings)));
+                delegateList.Add(new OABPartData.PartInfoModuleEntry(LocalizationManager.GetTranslation("Menu/VAB/thermalMass", true, 0, true, false, (GameObject)null, (string)null, true), new OABPartData.PartInfoModuleMultipleEntryValueDelegate(this.GetResourceStrings)));
             }
             return delegateList;
         }
