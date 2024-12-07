@@ -92,13 +92,14 @@ namespace Meltdown
             /* Fixes stock errors:
              * - the flux should be multiplied by the conversion rate
              * - the flux should not be multiplied by the time */
-            if (__instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.FluxGenerated > 0.0)
-            {
-                __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
-            }
-            /* Marks as heating if the converter is on and has a rate > 0. The flux is 0.0 because it's already set in the stock module. */
-            bool isHeating = __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0;
-            double fluxGenerated = GenerateFlux(__instance._componentModule, isHeating, rate:1.0, usePatchedFlux:false);
+            //if (__instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.FluxGenerated > 0.0)
+            //{
+            //    __instance.part.Model.ThermalData.OtherFlux = __instance._dataResourceConverter.FluxGenerated * (double)__instance._dataResourceConverter.conversionRate.GetValue();
+            //}
+            /* Marks as heating if the converter is on and has a rate > 0 and has enough resources */
+            bool isHeating = __instance._dataResourceConverter.ConverterIsActive && __instance._dataResourceConverter.conversionRate.GetValue() > 0 && __instance.HasEnoughResources();
+            double rate = __instance._dataResourceConverter.conversionRate.GetValue();
+            double fluxGenerated = GenerateFlux(__instance._componentModule, isHeating, rate, usePatchedFlux:true);
             __instance._dataResourceConverter.FluxGenerated = fluxGenerated;
 
             //System.Diagnostics.Debug.Write("Module_ResourceConverter.ThermalUpdatePostFix: otherFlux=" + __instance.part.Model.ThermalData.OtherFlux);
@@ -123,10 +124,10 @@ namespace Meltdown
         public static void OnUpdatePostFix(PartComponentModule_ResourceConverter __instance, bool __state)
         {
             if (!__instance._dataResourceConverter.EnabledToggle.GetValue()) return;
-            if (__instance._dataResourceConverter.ConverterIsActive != __state)
-            {
+            //if (__instance._dataResourceConverter.ConverterIsActive != __state)
+            //{
                 __instance._dataResourceConverter.ConverterIsActive = __state;
-            }
+            //}
         }
 
 
