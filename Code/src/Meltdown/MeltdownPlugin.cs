@@ -169,16 +169,6 @@ namespace Meltdown
         /** Active Radiator **/
 
         /**
-         * ...
-         **/
-        [HarmonyPatch(typeof(PartComponentModule_ActiveRadiator), nameof(PartComponentModule_ActiveRadiator.OnUpdate))]
-        [HarmonyPostfix]
-        public static void OnUpdatePostFix(double universalTime, double deltaUniversalTime, PartComponentModule_ActiveRadiator __instance)
-        {
-
-        }
-
-        /**
          * Define the currentCoolerState on initializing the radiator. It's OFF in the OAB, and RETRACTED by default when in flight.
          **/
         [HarmonyPatch(typeof(Module_ActiveRadiator), nameof(Module_ActiveRadiator.OnInitialize))]
