@@ -90,7 +90,7 @@
         * > Module_Command > Data_Command {
             requiredResources +: [
                 {
-                    Rate: 0.5 * $crewCapacity,
+                    Rate: 0.05 * $crewCapacity,
                     ResourceName: "ElectricCharge",
                     AcceptanceThreshold: 1.0
                 }
