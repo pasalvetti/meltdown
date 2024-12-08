@@ -88,7 +88,7 @@ namespace Meltdown.Modules
         {
             return
             [
-                new OABPartData.PartInfoModuleSubEntry(FluxGenerated + " kW")
+                new OABPartData.PartInfoModuleSubEntry(null, FluxGenerated + " kW")
             ];
         }
 
