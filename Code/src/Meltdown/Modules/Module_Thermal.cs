@@ -51,5 +51,18 @@ namespace Meltdown.Modules
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.CoolingEnergyToApplyTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
         }
 
+        /**
+         * Implements the ThermalUpdate for solar panels. This gets automatically called by the game.
+         **/
+        public override void ThermalUpdate(double deltaTime)
+        {
+            if (!part.TryGetComponent<Module_SolarPanel>(out Module_SolarPanel solarPanelModule)) return;
+            //if (solarPanelModule._timeWarpActive) return;
+            Data_Deployable.DeployState deployState = solarPanelModule.dataDeployable.CurrentDeployState.GetValue();
+            bool IsActive = (!solarPanelModule.dataDeployable.extendable || deployState == Data_Deployable.DeployState.Extended || deployState == Data_Deployable.DeployState.Extending);
+            double rate = solarPanelModule.dataSolarPanel.EnergyFlow.GetValue() / solarPanelModule.dataSolarPanel.ResourceSettings.Rate;
+            //System.Diagnostics.Debug.Write("[Meltdown] Module_Thermal.OnUpdatePostFix: " + part.Model.Name + " " + part.Model.GlobalId + "/rate=" + rate);
+            MeltdownPlugin.GenerateFlux(solarPanelModule._componentModule, isHeating: IsActive, rate, usePatchedFlux: true);
+        }
     }
 }
