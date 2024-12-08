@@ -12,8 +12,8 @@ namespace Meltdown.Patches
         {
             Data_Deployable.DeployState deployState = __instance.dataDeployable.CurrentDeployState.GetValue();
             bool IsActive = (!__instance.dataDeployable.extendable || deployState == Data_Deployable.DeployState.Extended || deployState == Data_Deployable.DeployState.Extending);
-            double rate = IsActive ? __instance.dataSolarPanel.EnergyFlow.GetValue() / __instance.dataSolarPanel.ResourceSettings.Rate : 0.0;
-            MeltdownPlugin.GenerateFlux(__instance, isHeating:IsActive && rate > 0.0, rate, usePatchedFlux:true);
+            double rate = __instance.dataSolarPanel.EnergyFlow.GetValue() / __instance.dataSolarPanel.ResourceSettings.Rate;
+            MeltdownPlugin.GenerateFlux(__instance, isHeating:IsActive, rate, usePatchedFlux:true);
         }
     }
 }
