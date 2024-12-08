@@ -44,9 +44,9 @@ namespace Meltdown.Modules
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.HeatGeneratedTxt, heatGeneratedVisibility && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.TemperatureTxt, PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.EnvironmentFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
-            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.SolarFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);
-            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.ReentryFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);
-            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.ExhaustFluxTxt, false && debugMode && PartBackingMode == PartBackingModes.Flight);
+            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.SolarFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
+            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.ReentryFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
+            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.ExhaustFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.otherFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.CoolingEnergyToApplyTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
         }
