@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using KSP.Modules;
-using KSP.Sim.impl;
 
 namespace Meltdown.Patches
 {
@@ -19,11 +18,13 @@ namespace Meltdown.Patches
         /**
          * Marks the generator as a heat-generating part and enable heat generation for generators.
          **/
-        [HarmonyPatch(typeof(PartComponentModule_Generator), nameof(PartComponentModule_Generator.OnUpdate))]
+        [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.ThermalUpdate))]
         [HarmonyPrefix]
-        public static void OnUpdatePreFix(double universalTime, PartComponentModule_Generator __instance)
+        public static void ThermalUpdatePostFix(double universalTime, Module_Generator __instance)
         {
-            double fluxGenerated = MeltdownPlugin.GenerateFlux(__instance, isHeating: true, rate: 1.0, usePatchedFlux: false);
+            bool isHeating = __instance.dataGenerator.GeneratorIsActive;
+            double rate = __instance._engineStatus == null ? 1.0 : (double)__instance._engineStatus.normalizedOutput;
+            double fluxGenerated = MeltdownPlugin.GenerateFlux(__instance._componentModule, isHeating, rate, usePatchedFlux: true);
             __instance.dataGenerator.FluxGenerated = fluxGenerated;
         }
     }
