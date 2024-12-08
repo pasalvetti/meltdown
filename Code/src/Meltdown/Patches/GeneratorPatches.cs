@@ -6,7 +6,7 @@ namespace Meltdown.Patches
     internal class GeneratorPatches
     {
         /**
-         * Prefix so that the field gets displayed in SetPAMVisibility().
+         * ...
          **/
         [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.OnInitialize))]
         [HarmonyPrefix]
@@ -19,8 +19,8 @@ namespace Meltdown.Patches
          * Marks the generator as a heat-generating part and enable heat generation for generators.
          **/
         [HarmonyPatch(typeof(Module_Generator), nameof(Module_Generator.ThermalUpdate))]
-        [HarmonyPrefix]
-        public static void ThermalUpdatePostFix(double universalTime, Module_Generator __instance)
+        [HarmonyPostfix]
+        public static void ThermalUpdatePostFix(Module_Generator __instance)
         {
             bool isHeating = __instance.dataGenerator.GeneratorIsActive;
             double rate = __instance._engineStatus == null ? 1.0 : (double)__instance._engineStatus.normalizedOutput;
