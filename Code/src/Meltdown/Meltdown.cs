@@ -25,6 +25,7 @@ public class Meltdown : BaseSpaceWarpPlugin
 
         // Register all Harmony patches in the project
         Harmony.CreateAndPatchAll(typeof(MeltdownPlugin));
+        Harmony.CreateAndPatchAll(typeof(CommandPatches));
     }
 }
 
