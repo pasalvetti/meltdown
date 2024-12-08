@@ -33,10 +33,9 @@ namespace Meltdown.Modules
         private void SetHeatGeneratedVisibility()
         {
             if (part == null) { return; }
-            if (part.TryGetComponent<Module_Generator>(out _))
-            {
-                heatGeneratedVisibility = false;
-            }
+            bool isGenerator = part.TryGetComponent<Module_Generator>(out _);
+            bool isEngine = part.TryGetComponent<Module_Engine>(out _);
+            heatGeneratedVisibility = !isGenerator || isEngine;
         }
 
         private void UpdatePAMVisibility()
