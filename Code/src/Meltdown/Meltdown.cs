@@ -25,7 +25,14 @@ public class Meltdown : BaseSpaceWarpPlugin
 
         // Register all Harmony patches in the project
         Harmony.CreateAndPatchAll(typeof(MeltdownPlugin));
+        Harmony.CreateAndPatchAll(typeof(ActiveRadiatorPatches));
         Harmony.CreateAndPatchAll(typeof(CommandPatches));
+        Harmony.CreateAndPatchAll(typeof(CoolerPatches));
+        Harmony.CreateAndPatchAll(typeof(GeneratorPatches));
+        Harmony.CreateAndPatchAll(typeof(HeatshieldPatches));
+        Harmony.CreateAndPatchAll(typeof(ResourceConverterPatches));
+        Harmony.CreateAndPatchAll(typeof(SolarPanelPatches));
+        Harmony.CreateAndPatchAll(typeof(ThermalComponentPatches));
     }
 }
 

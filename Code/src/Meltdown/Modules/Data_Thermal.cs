@@ -1,7 +1,6 @@
 ﻿using I2.Loc;
 using KSP;
 using KSP.Api;
-using KSP.Iteration.UI.Binding;
 using KSP.Sim;
 using KSP.Sim.Definitions;
 using Newtonsoft.Json;
