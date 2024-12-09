@@ -1,5 +1,7 @@
 @use "builtin:debug";
 
+$EC_TO_HEAT_RATIO: 15;
+
 /** Get the electric charge rate from a list **/
 @function get-ec-rate($resource-list, $part-name: "none") {
     @each $resource in $resource-list {
@@ -29,7 +31,7 @@
             +Module_Thermal {
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
-                    FluxGenerated: 10 * $rate;
+                    FluxGenerated: $EC_TO_HEAT_RATIO * $rate;
                     ThermalMassModifier: $thermalMassModifier;
                     Mass: $mass;
                     //$log: debug-log("Meltdown mass=#{$mass}");
@@ -48,7 +50,7 @@
             +Module_Thermal {
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
-                    FluxGenerated: 10 * $rate;
+                    FluxGenerated: $EC_TO_HEAT_RATIO * $rate;
                     ThermalMassModifier: $thermalMassModifier;
                     Mass: $mass;
                     //$log: debug-log("Meltdown mass=#{$mass}");
@@ -64,7 +66,7 @@
             +Module_Thermal {
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
-                    FluxGenerated: 10 * $rate;
+                    FluxGenerated: $EC_TO_HEAT_RATIO * $rate;
                     ThermalMassModifier: $thermalMassModifier;
                     Mass: $mass;
                     //$log: debug-log("Meltdown mass=#{$mass}");
@@ -95,7 +97,7 @@
         * > Module_Command > Data_Command {
             requiredResources +: [
                 {
-                    Rate: 0.05 * $crewCapacity,
+                    Rate: 0.1 * $crewCapacity,
                     ResourceName: "ElectricCharge",
                     AcceptanceThreshold: 1.0
                 }
@@ -113,7 +115,7 @@
     ] {
         +Module_Thermal {
             +Data_Thermal {
-                FluxGenerated: 10 * $rate;
+                FluxGenerated: $EC_TO_HEAT_RATIO * $rate;
                 ThermalMassModifier: $thermalMassModifier;
                 Mass: $mass;
                 //$log: debug-log("Meltdown mass=#{$mass}");
