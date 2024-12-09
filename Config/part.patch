@@ -11,6 +11,11 @@
     @return 0;
 }
 
+// increases thermal mass of solar panel to make them more resilient to temperature changes
+:parts .Module_SolarPanel {
+    thermalMassModifier *: 300;
+}
+
 :parts {
 // add Module_Thermal to all generators generating electric charge
     $thermalMassModifier: $$thermalMassModifier;
