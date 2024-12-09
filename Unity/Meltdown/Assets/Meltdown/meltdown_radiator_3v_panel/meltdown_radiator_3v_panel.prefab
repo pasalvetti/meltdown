@@ -480,7 +480,7 @@ MonoBehaviour:
     resourceDiplayNames: []
     fluxRemoved: 200
     emissiveLerpRateUp: 0.1
-    emissiveLerpRateDown: 0.01
+    emissiveLerpRateDown: 0.1
     emissiveMaterialNames:
     - meltdown_radiator_3v_panel
     fxGroupName: cooler
