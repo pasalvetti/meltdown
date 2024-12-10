@@ -9,7 +9,7 @@ namespace Meltdown.Modules
         [SerializeField]
         protected Data_Thermal _dataThermal;
 
-        private readonly bool debugMode = true;
+        private readonly bool debugMode = false;
         private bool heatGeneratedVisibility = true;
 
         public override Type PartComponentModuleType => typeof(PartComponentModule_Thermal);
