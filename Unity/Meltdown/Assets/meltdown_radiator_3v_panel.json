@@ -132,7 +132,7 @@
               "fxPrefab": "fx_gasburst_01",
               "requiredResources": [
                 {
-                  "Rate": 0.2,
+                  "Rate": 0.02,
                   "ResourceName": "ElectricCharge",
                   "AcceptanceThreshold": 0.0
                 }

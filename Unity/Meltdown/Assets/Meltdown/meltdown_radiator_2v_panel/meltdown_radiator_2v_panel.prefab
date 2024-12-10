@@ -521,7 +521,7 @@ MonoBehaviour:
     fxGroupName: cooler
     fxPrefab: fx_gasburst_01
     requiredResources:
-    - Rate: 0.05
+    - Rate: 0.005
       ResourceName: ElectricCharge
       AcceptanceThreshold: 0.5
     InputResourcesIDs: []
