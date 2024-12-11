@@ -1,6 +1,6 @@
 @use "builtin:debug";
 
-$EC_TO_HEAT_RATIO: 15;
+$EC_TO_HEAT_RATIO: 30;
 
 /** Get the electric charge rate from a list **/
 @function get-ec-rate($resource-list, $part-name: "none") {
