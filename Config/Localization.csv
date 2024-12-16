@@ -28,3 +28,18 @@ Parts/Title/meltdown_radiator_3v_panel,Text,,RP-200 "Toasty Snake"
 Parts/Subtitle/meltdown_radiator_3v_panel,Text,,Big Radiator Panel
 Parts/Manufacturer/meltdown_radiator_3v_panel,Text,,Meltdown Inc.
 Parts/Description/meltdown_radiator_3v_panel,Text,,"The folks at Meltdown Inc. had a bit of a 'hot mess' on their hands. They tried to Frankenstein two RP-50s together, but it was way too wobbly for anyone's taste. So, they cooked up a bigger, badder radiator to keep their spacecraft frosty. Winter is truly coming this time."
+
+Parts/Title/meltdown_radiator_0v_surface_1x,Text,,BBQ-1X "xxx"
+Parts/Subtitle/meltdown_radiator_0v_surface_1x,Text,,Very Small Surface Radiator
+Parts/Manufacturer/meltdown_radiator_0v_surface_1x,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_0v_surface_1x,Text,,""
+
+Parts/Title/meltdown_radiator_0v_surface_3x,Text,,BBQ-3X "xxx"
+Parts/Subtitle/meltdown_radiator_0v_surface_3x,Text,,Small Surface Radiator
+Parts/Manufacturer/meltdown_radiator_0v_surface_3x,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_0v_surface_3x,Text,,""
+
+Parts/Title/meltdown_radiator_0v_surface_10x,Text,,BBQ-10X "xxx"
+Parts/Subtitle/meltdown_radiator_0v_surface_10x,Text,,Not So Small Surface Radiator
+Parts/Manufacturer/meltdown_radiator_0v_surface_10x,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_0v_surface_10x,Text,,""

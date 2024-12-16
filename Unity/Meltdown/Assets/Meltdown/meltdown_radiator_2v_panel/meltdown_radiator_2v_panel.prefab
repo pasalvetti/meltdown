@@ -394,7 +394,7 @@ MonoBehaviour:
       category: 12
       family: 0460-Radiator
       childStageOffset: 0
-      cost: 100
+      cost: 200
       crewCapacity: 0
       stageOffset: 0
       isCompound: 0
@@ -513,7 +513,7 @@ MonoBehaviour:
     isTransformInContact: 0
     hasEnoughResources: 1
     resourceDiplayNames: []
-    fluxRemoved: 50
+    fluxRemoved: 200
     emissiveLerpRateUp: 0.1
     emissiveLerpRateDown: 0.1
     emissiveMaterialNames:
@@ -521,7 +521,7 @@ MonoBehaviour:
     fxGroupName: cooler
     fxPrefab: fx_gasburst_01
     requiredResources:
-    - Rate: 0.005
+    - Rate: 0.02
       ResourceName: ElectricCharge
       AcceptanceThreshold: 0.5
     InputResourcesIDs: []

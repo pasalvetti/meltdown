@@ -7,7 +7,7 @@
     "category": "Thermal",
     "family": "0460-Radiator",
     "childStageOffset": 0,
-    "cost": 100,
+    "cost": 60,
     "crewCapacity": 0,
     "stageOffset": 0,
     "isCompound": false,
@@ -122,7 +122,7 @@
               "isTransformInContact": false,
               "hasEnoughResources": true,
               "resourceDiplayNames": [],
-              "fluxRemoved": 15.0,
+              "fluxRemoved": 60.0,
               "emissiveLerpRateUp": 0.1,
               "emissiveLerpRateDown": 0.1,
               "emissiveMaterialNames": [
@@ -132,7 +132,7 @@
               "fxPrefab": "fx_gasburst_01",
               "requiredResources": [
                 {
-                  "Rate": 0.0015,
+                  "Rate": 0.006,
                   "ResourceName": "ElectricCharge",
                   "AcceptanceThreshold": 0.5
                 }
