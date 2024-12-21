@@ -1,11 +1,35 @@
+// TIER 1
+
+// Light Launchers (10 science points)
+:science #tNode_1v_rockets_01 {
+  UnlockedPartsIDs +: [ "meltdown_radiator_0v_surface_1x" ];
+}
+
+// Probes (10 science points)
 :science #tNode_0v_electronics {
+  UnlockedPartsIDs +: [ "meltdown_radiator_0v_surface_3x" ];
+}
+
+// Long-Range Probes (50 science points)
+:science #tNode_1v_electronics_02 {
+UnlockedPartsIDs +: [ "meltdown_radiator_0v_surface_10x" ];
+}
+
+// TIER 2
+
+// Enhanced Electronics (230 science points)
+:science #tNode_1v_electronics_03 {
   UnlockedPartsIDs +: [ "meltdown_radiator_1v_panel" ];
 }
 
-:science #tNode_1v_electronics_01 {
+// Durable Power Systems (300 science points)
+:science #tNode_1v_electronics_04 {
   UnlockedPartsIDs +: [ "meltdown_radiator_2v_panel" ];
 }
 
-:science #tNode_1v_electronics_04 {
+// TIER 3
+
+// Enlarged Power Systems (1800 science points)
+:science #tNode_2v_electronics_01 {
   UnlockedPartsIDs +: [ "meltdown_radiator_3v_panel" ];
 }
