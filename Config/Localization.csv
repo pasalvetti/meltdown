@@ -14,32 +14,32 @@ PartModules/Thermal/Name,Text,,Thermal
 
 Menu/VAB/thermalMass,Text,,Thermal Mass
 
-Parts/Title/meltdown_radiator_1v_panel,Text,,RP-15 "Hot Snail"
+Parts/Title/meltdown_radiator_0v_surface_1x,Text,,BBQ-1X
+Parts/Subtitle/meltdown_radiator_0v_surface_1x,Text,,Very Small Surface Radiator
+Parts/Manufacturer/meltdown_radiator_0v_surface_1x,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_0v_surface_1x,Text,,"BBQ-1X is the perfect companion for your early space ventures. It's not very powerful, but it's cheap and tiny. The engineers at Meltdown Inc. put it together in a hurry. Surprisingly, it worked."
+
+Parts/Title/meltdown_radiator_0v_surface_3x,Text,,BBQ-3X
+Parts/Subtitle/meltdown_radiator_0v_surface_3x,Text,,Small Surface Radiator
+Parts/Manufacturer/meltdown_radiator_0v_surface_3x,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_0v_surface_3x,Text,,"Turns out, 'a day' wasn't enough. The heat was still a problem for longer missions. So, they took the BBQ-1X, stretched it out a bit (okay, a lot), and hoped for the best. Enter the BBQ-3X: three times the cooling, three times the… well, you get the idea."
+
+Parts/Title/meltdown_radiator_0v_surface_10x,Text,,BBQ-10X
+Parts/Subtitle/meltdown_radiator_0v_surface_10x,Text,,Not So Small Surface Radiator
+Parts/Manufacturer/meltdown_radiator_0v_surface_10x,Text,,Meltdown Inc.
+Parts/Description/meltdown_radiator_0v_surface_10x,Text,,"After the initial successes of the BBQ-3X, the engineers over at Meltdown Inc. realized that it wasn't going to be enought for big crafts. Turns out, a really, really long radiator works wonders. The BBQ-10X: proof that sometimes, brute force is the best solution. And yes, it still has a few dents. It adds character."
+
+Parts/Title/meltdown_radiator_1v_panel,Text,,RP-60 "Hot Snail"
 Parts/Subtitle/meltdown_radiator_1v_panel,Text,,Small Radiator Panel
 Parts/Manufacturer/meltdown_radiator_1v_panel,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_1v_panel,Text,,"RP-15 is the unassuming hero of the new space era. It may look slow, but slow and steady wins the race. So next time your satellite's overheating, remember: Hot Snail's got your back, one slow coil at a time."
+Parts/Description/meltdown_radiator_1v_panel,Text,,"Early tests showed that our BBQ brand was unsuitable for deep-space exploration. Enters RP-60, the unassuming hero of the new space era. It may look slow, but slow and steady wins the race. So next time your satellite's overheating, remember: Hot Snail's got your back, one slow coil at a time."
 
-Parts/Title/meltdown_radiator_2v_panel,Text,,RP-50 "Barbecue"
+Parts/Title/meltdown_radiator_2v_panel,Text,,RP-200 "Barbecue"
 Parts/Subtitle/meltdown_radiator_2v_panel,Text,,Medium Radiator Panel
 Parts/Manufacturer/meltdown_radiator_2v_panel,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_2v_panel,Text,,"With its winding cooling tube, RP-50 is the ultimate grill master, constantly roasting away the excess heat."
+Parts/Description/meltdown_radiator_2v_panel,Text,,"With its winding cooling tube, RP-200 is the ultimate grill master, constantly roasting away the excess heat."
 
-Parts/Title/meltdown_radiator_3v_panel,Text,,RP-200 "Toasty Snake"
+Parts/Title/meltdown_radiator_3v_panel,Text,,RP-1000 "Toasty Snake"
 Parts/Subtitle/meltdown_radiator_3v_panel,Text,,Big Radiator Panel
 Parts/Manufacturer/meltdown_radiator_3v_panel,Text,,Meltdown Inc.
 Parts/Description/meltdown_radiator_3v_panel,Text,,"The folks at Meltdown Inc. had a bit of a 'hot mess' on their hands. They tried to Frankenstein two RP-50s together, but it was way too wobbly for anyone's taste. So, they cooked up a bigger, badder radiator to keep their spacecraft frosty. Winter is truly coming this time."
-
-Parts/Title/meltdown_radiator_0v_surface_1x,Text,,BBQ-1X "xxx"
-Parts/Subtitle/meltdown_radiator_0v_surface_1x,Text,,Very Small Surface Radiator
-Parts/Manufacturer/meltdown_radiator_0v_surface_1x,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_0v_surface_1x,Text,,""
-
-Parts/Title/meltdown_radiator_0v_surface_3x,Text,,BBQ-3X "xxx"
-Parts/Subtitle/meltdown_radiator_0v_surface_3x,Text,,Small Surface Radiator
-Parts/Manufacturer/meltdown_radiator_0v_surface_3x,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_0v_surface_3x,Text,,""
-
-Parts/Title/meltdown_radiator_0v_surface_10x,Text,,BBQ-10X "xxx"
-Parts/Subtitle/meltdown_radiator_0v_surface_10x,Text,,Not So Small Surface Radiator
-Parts/Manufacturer/meltdown_radiator_0v_surface_10x,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_0v_surface_10x,Text,,""
