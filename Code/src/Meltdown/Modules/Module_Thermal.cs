@@ -10,7 +10,6 @@ namespace Meltdown.Modules
         protected Data_Thermal _dataThermal;
 
         private readonly bool debugMode = false;
-        private bool heatGeneratedVisibility = true;
 
         public override Type PartComponentModuleType => typeof(PartComponentModule_Thermal);
 
@@ -23,25 +22,13 @@ namespace Meltdown.Modules
         public override void OnInitialize()
         {
             base.OnInitialize();
-            SetHeatGeneratedVisibility();
-            UpdatePAMVisibility();
-        }
-
-        /**
-         * No need to show the heat generated for Resource Converters and Generators as it's already done by the stock module.
-         **/
-        private void SetHeatGeneratedVisibility()
-        {
-            if (part == null) { return; }
-            bool isGenerator = part.TryGetComponent<Module_Generator>(out _);
-            bool isEngine = part.TryGetComponent<Module_Engine>(out _);
-            heatGeneratedVisibility = !isGenerator || isEngine;
+             UpdatePAMVisibility();
         }
 
         private void UpdatePAMVisibility()
         {
             if (_dataThermal == null) return;
-            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.HeatGeneratedTxt, heatGeneratedVisibility && PartBackingMode == PartBackingModes.Flight);
+            _dataThermal.SetVisible((IModuleDataContext)_dataThermal.HeatGeneratedTxt, PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.TemperatureTxt, PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.EnvironmentFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
             _dataThermal.SetVisible((IModuleDataContext)_dataThermal.SolarFluxTxt, debugMode && PartBackingMode == PartBackingModes.Flight);
