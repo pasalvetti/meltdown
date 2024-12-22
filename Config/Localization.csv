@@ -32,7 +32,7 @@ Parts/Description/meltdown_radiator_0v_surface_10x,Text,,"After the initial succ
 Parts/Title/meltdown_radiator_1v_panel,Text,,RP-60 "Hot Snail"
 Parts/Subtitle/meltdown_radiator_1v_panel,Text,,Small Radiator Panel
 Parts/Manufacturer/meltdown_radiator_1v_panel,Text,,Meltdown Inc.
-Parts/Description/meltdown_radiator_1v_panel,Text,,"Early tests showed that our BBQ brand was unsuitable for deep-space exploration. Enters RP-60, the unassuming hero of the new space era. It may look slow, but slow and steady wins the race. So next time your satellite's overheating, remember: Hot Snail's got your back, one slow coil at a time."
+Parts/Description/meltdown_radiator_1v_panel,Text,,"Early tests showed that our BBQ brand was unsuitable for deep-space exploration. Enter RP-60, the unassuming hero of the new space era. It may look slow, but slow and steady wins the race. So next time your satellite's overheating, remember: Hot Snail's got your back, one slow coil at a time."
 
 Parts/Title/meltdown_radiator_2v_panel,Text,,RP-200 "Barbecue"
 Parts/Subtitle/meltdown_radiator_2v_panel,Text,,Medium Radiator Panel
