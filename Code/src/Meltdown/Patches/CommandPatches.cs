@@ -9,7 +9,7 @@ namespace Meltdown.Patches
         [HarmonyPostfix]
         public static void OnUpdatePostFix(PartComponentModule_Command __instance)
         {
-            bool isHeating = __instance._hasResourcesToOperate; // a command pod is heating unless it's out of EC
+            bool isHeating = __instance._hasResourcesToOperate && !__instance.dataCommand.IsHibernating; // a command pod is heating when it's neither hibernating nor out of EC
             MeltdownPlugin.GenerateFlux(__instance, isHeating, rate:1.0, usePatchedFlux:true);
         }
     }
