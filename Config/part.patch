@@ -58,10 +58,15 @@ $EC_TO_HEAT_RATIO: 30;
             }
         }
     }
-// add Module_Thermal to all solar panels
+
     .Module_SolarPanel:[
         $rate: $$ResourceSettings[Rate];
     ] {
+// solar panel rate increased by 2
+        * > Module_SolarPanel > Data_SolarPanel > ResourceSettings {
+            Rate *: 2;
+        }
+// add Module_Thermal to all solar panels
         @if ($rate > 0) {
             +Module_Thermal {
                 +Data_Thermal {
