@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4502566944489314715}
   - component: {fileID: 7756431476666796479}
   - component: {fileID: 5024050686814348830}
+  - component: {fileID: 7482217263205397696}
   m_Layer: 0
   m_Name: meltdown_radiator_0v_surface_3x
   m_TagString: Untagged
@@ -126,6 +127,10 @@ MonoBehaviour:
           Data: 
         - Name: Data_ActiveRadiator
           Data: 
+      - Name: PartComponentModule_Drag
+        ModuleData:
+        - Name: Data_Drag
+          Data: 
       resourceSummary:
         Consumes: []
         Generates: []
@@ -189,6 +194,65 @@ MonoBehaviour:
   dataActiveRadiator:
     RadiatorDirection: 0
     ProceduralRadiatorFluxPerAreaUnit: 0
+--- !u!114 &7482217263205397696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797414545735189269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1953352323, guid: 06dd3d5416bf43ea368cc39ff96e6d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataDrag:
+    BodyLiftEnabled: 1
+    DragEnabled: 1
+    bodyLiftMultiplier: 1
+    cubes: []
+    weightedArea:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    weightedExposedArea:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    weightedDrag:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    weightedDragMultiplier:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    weightedDepth:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    weightedCenter: {x: 0, y: 0, z: 0}
+    weightedSize: {x: 0, y: 0, z: 0}
+    isDragCubeRotated: 0
+    dragCubeRotation: {x: 0, y: 0, z: 0, w: 1}
+    UpdateExposedArea: 0
+  bodyLiftScalar: 0
+  dragScalar: 0
 --- !u!1 &1089704959349738325
 GameObject:
   m_ObjectHideFlags: 0
