@@ -62,16 +62,12 @@ $EC_TO_HEAT_RATIO: 20;
     .Module_SolarPanel:[
         $rate: $$ResourceSettings[Rate];
     ] {
-// solar panel rate increased by 2
-        * > Module_SolarPanel > Data_SolarPanel > ResourceSettings {
-            Rate *: 2;
-        }
 // add Module_Thermal to all solar panels
         @if ($rate > 0) {
             +Module_Thermal {
                 +Data_Thermal {
                     //$log: debug-log("Meltdown FluxGenerated=10*#{$rate}");
-                    FluxGenerated: $EC_TO_HEAT_RATIO * $rate;
+                    FluxGenerated: $EC_TO_HEAT_RATIO * $rate / 10;
                     ThermalMassModifier: $thermalMassModifier;
                     Mass: $mass;
                     //$log: debug-log("Meltdown mass=#{$mass}");
