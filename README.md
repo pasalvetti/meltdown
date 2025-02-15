@@ -43,7 +43,7 @@ This mod adds six radiators, of varying power and shape, to meet all your missio
 1. Open the game folder by right-clicking on the game in your Steam library, selecting "Manage," and then clicking "Browse local files."
 2. Install the [Space Warp + BepinEx plugin](https://spacedock.info/mod/3277/Space%20Warp%20+%20BepInEx) (available on CKAN).
 3. Install the [Patch Manager plugin](https://spacedock.info/mod/3482/Patch%20Manager) (available on CKAN).
-4. Download the latest version of this mod, either on [GitHub](https://github.com/pasalvetti/xxx/releases) or on [Spacedock](https://spacedock.info/mod/xxx).
+4. Download the latest version of this mod, either on [GitHub](https://github.com/pasalvetti/meltdown/releases) or on [Spacedock](https://spacedock.info/mod/3822/Meltdown).
 5. Open the zip file and drag the included BepInEx folder into the game folder (merge folders when asked).
 
 ## Dependencies
@@ -56,7 +56,7 @@ Spacedock: https://spacedock.info/mod/3822/Meltdown
 
 Contact: [KSP 2 Modding Society](https://discord.com/channels/1078696971088433153/1325942279260868728)
 
-Forum: https://forum.kerbalspaceprogram.com/topic/xxx
+Forum: https://forum.kerbalspaceprogram.com/topic/226899-meltdown-011-for-ksp2-0220/
 
 ## Special Thanks
 To the Rendezvous Entertainment team, especially Lexi for her help with Patch Manager.
