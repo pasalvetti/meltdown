@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7756431476666796479}
   - component: {fileID: 5024050686814348830}
   - component: {fileID: 7482217263205397696}
+  - component: {fileID: 6994541577673256893}
   m_Layer: 0
   m_Name: meltdown_radiator_0v_surface_3x
   m_TagString: Untagged
@@ -253,6 +254,19 @@ MonoBehaviour:
     UpdateExposedArea: 0
   bodyLiftScalar: 0
   dragScalar: 0
+--- !u!114 &6994541577673256893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797414545735189269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1674229125, guid: 06dd3d5416bf43ea368cc39ff96e6d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dataColor: {}
 --- !u!1 &1089704959349738325
 GameObject:
   m_ObjectHideFlags: 0
