@@ -52,7 +52,7 @@ This mod adds six radiators, of varying power and shape, to meet all your missio
 [Patch Manager](https://spacedock.info/mod/3482/Patch%20Manager)
 
 ## Links
-Spacedock: https://spacedock.info/mod/xxx
+Spacedock: https://spacedock.info/mod/3822/Meltdown
 
 Contact: [KSP 2 Modding Society](https://discord.com/channels/1078696971088433153/1325942279260868728)
 
