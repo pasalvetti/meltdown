@@ -54,7 +54,7 @@ This mod adds six radiators, of varying power and shape, to meet all your missio
 ## Links
 Spacedock: https://spacedock.info/mod/xxx
 
-Contact: [KSP 2 Modding Society](https://discord.com/channels/xxx)
+Contact: [KSP 2 Modding Society](https://discord.com/channels/1078696971088433153/1325942279260868728)
 
 Forum: https://forum.kerbalspaceprogram.com/topic/xxx
 
