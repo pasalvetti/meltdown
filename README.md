@@ -36,7 +36,7 @@ This mod adds six radiators, of varying power and shape, to meet all your missio
 
 ## Known Issues
 - All radiators of the same type turn on and off at the same time.
-- Radiators cannot be painted.
+- Panel radiators cannot be painted.
 - Probably not a Meltdown bug, but timewarp above x1000 can create instability in the EC flow, resulting in the temporary shutdown of the radiators, which can lead to overheating parts being destroyed.
 
 ## Installation
